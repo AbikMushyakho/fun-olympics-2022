@@ -8,8 +8,7 @@ import { categoryExists } from "../utils/existsMiddleware.js";
 const categoryRouter = Router();
 
 categoryRouter.get("/", async (request, response) => {
-  const categories = await Category.find({});
-  // .populate("videos");
+  const categories = await Category.find({}).populate("videos");
   response.json(categories);
 });
 
@@ -54,8 +53,9 @@ categoryRouter.post(
 );
 
 categoryRouter.get("/:id", async (request, response) => {
-  const category = await Category.findById(request.params.id);
-  // .populate("videos");
+  const category = await Category.findById(request.params.id).populate(
+    "videos"
+  );
   category
     ? response.status(200).json(category)
     : response.status(404).json({ error: "Category doesn't exists!" }).end();

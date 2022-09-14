@@ -7,7 +7,7 @@ const videoSchema = new mongoose.Schema({
   views: { type: Number, default: 0 },
   category: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "category",
+    ref: "categories",
   },
   uploader: {
     type: mongoose.Schema.Types.ObjectId,

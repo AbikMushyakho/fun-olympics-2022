@@ -5,6 +5,7 @@ import { checkAdmin } from "../utils/middleware.js";
 import { uploadVideo } from "../utils/multer.js";
 import { SECRET } from "../utils/config.js";
 import { videoExists } from "../utils/existsMiddleware.js";
+import Category from "../models/category.js";
 
 const videoRouter = Router();
 
@@ -53,12 +54,14 @@ videoRouter.post(
       description: body.description,
       video_url: videoPath,
       category: body.category_id,
-      user: user.id,
+      uploader: user.id,
     });
     // .populate("category", { title: 1 })
     // .populate("user", { username: 1, email: 1 }).exec();
-
     const savedVideo = await video.save();
+    const category = await Category.findById(body.category_id);
+    category.videos = category.videos.concat(savedVideo._id);
+    await category.save();
     savedVideo
       ? response.status(201).json(savedVideo)
       : response
@@ -91,6 +94,5 @@ videoRouter.patch("/:id", checkAdmin, async (request, response) => {
 });
 
 // add video in a category through video controller
-
 
 export default videoRouter;
