@@ -2,11 +2,16 @@ import mongoose from "mongoose";
 
 const videoSchema = new mongoose.Schema({
   title: { type: String, required: true },
-  url: { type: String, required: true },
-  views: { type: Number, default: 0, required: true },
+  video_url: { type: String, required: true },
+  description:{type:String},
+  views: { type: Number, default: 0 },
   category: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "category",
+  },
+  uploader: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "users",
   },
 });
 
@@ -18,5 +23,5 @@ videoSchema.set("toJSON", {
   },
 });
 
-const Category = mongoose.model("video", videoSchema);
-export default Category;
+const Video = mongoose.model("videos", videoSchema);
+export default Video;

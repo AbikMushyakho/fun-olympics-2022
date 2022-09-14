@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true },
   passwordHash: { type: String, required: true },
   favourites: [
-    {type:mongoose.Schema.Types.ObjectId, ref:'video'}
+    {type:mongoose.Schema.Types.ObjectId, ref:'videos'}
   ],
   verified: { type: Boolean, default: false },
   isAdmin: { type: Boolean, default: false },
@@ -20,5 +20,5 @@ userSchema.set("toJSON", {
   },
 });
 
-const User = mongoose.model("user", userSchema);
+const User = mongoose.model("users", userSchema);
 export default User;

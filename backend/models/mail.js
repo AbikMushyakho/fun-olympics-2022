@@ -24,5 +24,5 @@ mailSchema.set("toJSON", {
   },
 });
 
-const Mail = mongoose.model("mail_code", mailSchema);
+const Mail = mongoose.model("mail_codes", mailSchema);
 export default Mail;
