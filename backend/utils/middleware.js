@@ -2,6 +2,7 @@ import { info, errors } from "../utils/logger.js";
 import jwt from "jsonwebtoken";
 import { SECRET } from "./config.js";
 import User from "../models/user.js";
+import Category from "../models/category.js";
 
 const requestLogger = (request, response, next) => {
   info("Method:", request.method);
@@ -29,6 +30,14 @@ const userExtractor = async (request, response, next) => {
   next();
 };
 
+const checkAdmin = async (request, response, next) => {
+  const user = request.user;
+  if (!user.isAdmin) {
+    return response.status(400).json({ error: "Bad request!" });
+  }
+  next();
+};
+
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: "unknown endpoint" });
 };
@@ -52,10 +61,12 @@ const errorHandler = (error, request, response, next) => {
   next(error);
 };
 
+
 export {
   unknownEndpoint,
   requestLogger,
   errorHandler,
   tokenExtractor,
   userExtractor,
+  checkAdmin,
 };

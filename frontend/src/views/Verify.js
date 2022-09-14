@@ -17,11 +17,14 @@ const Verify = () => {
     try {
       const response = await verify(data);
       if (response) {
-        toast.success(`Email verified..`);
+        toast.success(`Email verified..`, {
+          autoClose:2000
+        });
         window.localStorage.removeItem("signupEmail");
-        setTimeout(() => {
-          navigate("/login");
-        }, 5000);
+          setInterval(() => {
+            navigate("/login");
+          }, 2000);
+       
       }
     } catch (error) {
       toast.error(error.response.data.error);

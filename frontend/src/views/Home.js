@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import CategoryCard from "../Components/CategoryCard";
 import NewsCard from "../Components/NewsCard";
 
@@ -22,6 +23,13 @@ const Home = () => {
           <p className="text-lg font-normal text-gray-500 lg:text-xl dark:text-gray-400">
             Watch original Olympic content and documentaries for free.
           </p>
+          <br />
+          <Link
+            to="/live"
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          >
+            Watch live
+          </Link>
         </div>
       </div>
       {/* Categories */}
@@ -31,7 +39,7 @@ const Home = () => {
         </span>
         <hr className=" mt-4 h-1" />
 
-        <div className="flex flex-col lg:flex-row space-y-4  lg:space-x-4 mt-8 overflow-hidden justify-start md:justify-between items-stretch md:items-baseline">
+        <div className="grid grid-cols-1 grid-flow-row gap-4 md:grid-cols-3 mt-8">
           <CategoryCard
             details={{
               linkUrl: "/categories/1",
@@ -74,28 +82,28 @@ const Home = () => {
         </span>
         <hr className=" mt-4 h-1" />
 
-        <div className="flex flex-col mt-8 space-y-4 lg:flex-row lg:space-x-6 overflow-hidden justify-start items-stretch md:items-baseline">
-          <NewsCard
-           details={{
-            linkUrl:"/news/1",
-            imgUrl:"/assets/news/news-1.jpg",
-            title:`French breakers set the scene for Paris 2024 Olympic Games |
-                Breaking Life`
-           }}
-          />
+        <div className="grid grid-cols-1 grid-flow-row gap-4 md:grid-cols-3 mt-8">
           <NewsCard
             details={{
-              linkUrl:"/news/1",
-              imgUrl:"/assets/news/news-2.webp",
-              title:`Key storylines from the 2022 Diamond League Final in Zurich`
+              linkUrl: "/news/1",
+              imgUrl: "/assets/news/news-1.jpg",
+              title: `French breakers set the scene for Paris 2024 Olympic Games |
+                Breaking Life`,
             }}
           />
           <NewsCard
-           details={{
-            linkUrl:"/news/3",
-            imgUrl:"/assets/news/news-3.webp",
-            title:`Canada Women’s Ice Hockey: Beijing2022 Medal Moments﻿`
-           }}
+            details={{
+              linkUrl: "/news/1",
+              imgUrl: "/assets/news/news-2.webp",
+              title: `Key storylines from the 2022 Diamond League Final in Zurich`,
+            }}
+          />
+          <NewsCard
+            details={{
+              linkUrl: "/news/3",
+              imgUrl: "/assets/news/news-3.webp",
+              title: `Canada Women’s Ice Hockey: Beijing2022 Medal Moments﻿`,
+            }}
           />
         </div>
       </div>

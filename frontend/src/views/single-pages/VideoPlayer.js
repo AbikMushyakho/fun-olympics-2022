@@ -11,7 +11,7 @@ const VideoPlayer = ({ loginStatus }) => {
     toast.error("Must login to watch live videos!!");
     setTimeout(() => {
       navigate("/login");
-    }, 5000);
+    }, 2000);
   }
 
   const [played, setPlayed] = useState(0);

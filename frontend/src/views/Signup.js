@@ -26,15 +26,18 @@ const Signup = () => {
               const response = await signup(data);
               if (response) {
                 toast.success(
-                  `Welcome ${response.username}. Please verify your email and continue!`
+                  `Welcome ${response.username}. Please verify your email and continue!`,
+                  {
+                    autoClose: 2000
+                  }
                 );
                 window.localStorage.setItem(
                   "signupEmail",
                   JSON.stringify(response.email)
                 );
-                setTimeout(() => {
-                  navigate("/verify");
-                }, 5000);
+                  setInterval(() => {
+                    navigate("/verify");    
+                  }, 200);            
               }
             } catch (error) {
               toast.error(error.response.data.error);

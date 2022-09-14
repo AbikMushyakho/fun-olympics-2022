@@ -20,14 +20,27 @@ import Analytics from "./views/panel/Pages/Analytics";
 import Users from "./views/panel/Pages/Users";
 import Verify from "./views/Verify";
 import { useState } from "react";
-
+import Search from "./views/single-pages/Search";
+import Profile from "./views/single-pages/Profile";
 
 function App() {
   const [loginStatus, setLoginStatus] = useState(false);
+  const [searchText, setSearchText] = useState({ query: "" });
+
+  const handleSearchKey = (event) => {
+    event.preventDefault();
+    setSearchText({query:`${event.target.value}`})
+    console.log(event.target.value);
+    
+  };
   return (
     <div className="App left-0 dark">
       <Router>
-        <Navbar loginStatus={loginStatus} setLoginStatus={setLoginStatus}/>
+        <Navbar
+          loginStatus={loginStatus}
+          setLoginStatus={setLoginStatus}
+          handleSearchKey={handleSearchKey}
+        />
         <div className="mt-14 px-10 py-10 dark:bg-gray-900  text-wheatt ">
           <Routes>
             <Route index element={<Home />} />
@@ -37,6 +50,8 @@ function App() {
             />
             <Route path="signup" element={<Signup />} />
             <Route path="verify" element={<Verify />} />
+            <Route path="search" element={<Search searchText={searchText}/>} />
+            <Route path="profile" element={<Profile />} />
             <Route path="news">
               <Route index element={<News />} />
               <Route path=":id" element={<SingleNews />} />
@@ -45,7 +60,10 @@ function App() {
               <Route index element={<Categories />} />
               <Route path=":id">
                 <Route index element={<SingleCategory />} />
-                <Route path=":id" element={<VideoPlayer loginStatus={loginStatus} />} />
+                <Route
+                  path=":id"
+                  element={<VideoPlayer loginStatus={loginStatus} />}
+                />
               </Route>
             </Route>
             <Route path="live" element={<Live loginStatus={loginStatus} />} />

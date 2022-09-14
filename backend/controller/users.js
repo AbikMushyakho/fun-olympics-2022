@@ -8,7 +8,7 @@ const userRouter = express.Router();
 
 userRouter.get("/", async (request, response) => {
   // Can use populate  like .populate('favourites')
-  const users = await User.find({});
+  const users = await User.find({}).populate("video");
   response.status(200).json(users);
 });
 

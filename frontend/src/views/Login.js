@@ -19,13 +19,15 @@ const Login = ({ setLoginStatus }) => {
               const response = await login(data);
               if (response) {
                 resetForm({});
-                toast.success("Login Success!");
+                toast.success("Login Success!", {
+                  autoClose: 2000,
+                });
                 const user = JSON.stringify(response);
                 window.localStorage.setItem("loggedInOlympicsUser", user);
                 setLoginStatus(true);
                 setTimeout(() => {
                   navigate("/live");
-                }, 5000);
+                }, 2000);
               }
             } catch (error) {
               toast.error(error.response.data.error);
