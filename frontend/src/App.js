@@ -19,38 +19,61 @@ import AdminNews from "./views/panel/Pages/News";
 import Analytics from "./views/panel/Pages/Analytics";
 import Users from "./views/panel/Pages/Users";
 import Verify from "./views/Verify";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Search from "./views/single-pages/Search";
 import Profile from "./views/single-pages/Profile";
+import { setToken } from "./services/news";
+import Notification from "./Components/Notification";
 
 function App() {
-  const [loginStatus, setLoginStatus] = useState(false);
+  const [user, setUser] = useState(null);
   const [searchText, setSearchText] = useState({ query: "" });
+  const [message,setMessage] = useState(null)
+
+  if(message !== null){
+    setTimeout(() => {
+      setMessage(null)
+    }, 5000)
+  } 
 
   const handleSearchKey = (event) => {
     event.preventDefault();
-    setSearchText({query:`${event.target.value}`})
+    setSearchText({ query: `${event.target.value}` });
     console.log(event.target.value);
-    
   };
+
+  useEffect(() => {
+    let loggedUser = window.localStorage.getItem("loggedInOlympicsUser");
+    if (loggedUser) {
+      const parsedUser = JSON.parse(loggedUser);
+      setUser(parsedUser);
+      setToken(parsedUser.token);
+    }
+  },[]);
+
+
   return (
     <div className="App left-0 dark">
       <Router>
         <Navbar
-          loginStatus={loginStatus}
-          setLoginStatus={setLoginStatus}
+          user={user}
+          setUser={setUser}
+          setMessage={setMessage}
           handleSearchKey={handleSearchKey}
         />
+
+
         <div className="mt-14 px-10 py-10 dark:bg-gray-900  text-wheatt ">
+        {message && <Notification notify={message} />  }
           <Routes>
             <Route index element={<Home />} />
             <Route
               path="login"
-              element={<Login setLoginStatus={setLoginStatus} />}
+              element={<Login setUser={setUser} setMessage={setMessage} />}
             />
-            <Route path="signup" element={<Signup />} />
+            <Route path="signup" element={<Signup setMessage={setMessage} />} />
             <Route path="verify" element={<Verify />} />
-            <Route path="search" element={<Search searchText={searchText}/>} />
+            <Route path="search" element={<Search searchText={searchText} />} />
             <Route path="profile" element={<Profile />} />
             <Route path="news">
               <Route index element={<News />} />
@@ -62,11 +85,11 @@ function App() {
                 <Route index element={<SingleCategory />} />
                 <Route
                   path=":id"
-                  element={<VideoPlayer loginStatus={loginStatus} />}
+                  element={<VideoPlayer user={user} setMessage={setMessage} />}
                 />
               </Route>
             </Route>
-            <Route path="live" element={<Live loginStatus={loginStatus} />} />
+            <Route path="live" element={<Live user={user} setMessage={setMessage} />} />
             <Route path="panel">
               <Route index element={<Dashboard />} />
               <Route path="users" element={<Users />} />

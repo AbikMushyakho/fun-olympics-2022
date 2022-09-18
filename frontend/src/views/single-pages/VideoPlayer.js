@@ -3,20 +3,18 @@ import { useNavigate } from "react-router-dom";
 
 import ResponsivePlayer from "../../Components/ResponsivePlayer";
 import VideoCard from "../../Components/VideoCard";
-import { ToastContainer, toast } from "react-toastify";
 
-const VideoPlayer = ({ loginStatus }) => {
+const VideoPlayer = ({ user ,setMessage}) => {
   const navigate = useNavigate();
-  if (!loginStatus) {
-    toast.error("Must login to watch live videos!!");
-    setTimeout(() => {
-      navigate("/login");
-    }, 2000);
-  }
+ 
 
   const [played, setPlayed] = useState(0);
 
   useEffect(() => {
+    if (user === null) {
+      setMessage({message:'Must login to watch live videos!!', className:'warning'})
+      navigate("/login");
+    }
     // title can be the fetched video title
     document.title = "Video player";
     return () => {
@@ -35,9 +33,8 @@ const VideoPlayer = ({ loginStatus }) => {
   return (
     <div>
       <div className="w-full flex flex-col">
-        <ToastContainer position="top-right" />
         <ResponsivePlayer
-          url={loginStatus ? "/assets/live-video/swimming.mp4" : ""}
+          url={user ? "/assets/live-video/swimming.mp4" : ""}
           onProgress={handleWatchTime}
         />
         <div className="text-wheatt font-bold py-2 md:my-2">

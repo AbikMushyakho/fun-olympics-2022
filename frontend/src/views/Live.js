@@ -1,16 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import VideoCard from "../Components/VideoCard";
-import { ToastContainer, toast } from "react-toastify";
+// import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-const Live = ({ loginStatus }) => {
+const Live = ({ user,setMessage }) => {
   const navigate = useNavigate();
-  if (!loginStatus) {
-    toast.error("Must login to watch live videos!!");
-    setTimeout(() => {
-      navigate("/login");
-    }, 2000);
+useEffect(()=>{
+  if (user === null) {
+    navigate("/login");
+    setMessage({message:'Must login to watch live videos!!', className:'warning'})
   }
-
+},[])
   return (
     <div className="w-full flex flex-col">
       <div className="mb-8 w-full flex justify-center">
@@ -19,7 +18,7 @@ const Live = ({ loginStatus }) => {
         </span>
       </div>
 
-      <ToastContainer position="top-right" />
+      {/* <ToastContainer position="top-right" /> */}
       <div className="flex justify-end h-auto live-video lg:justify-center">
         <div className="flex flex-row absolute mt-2 justify-end text-wheatt w-80 md:w-96 lg:w-full">
           <span className="bg-red-600 font-bold p-1 lg:p-1.5 mr-4 rounded-lg  lg:mr-60">
@@ -29,7 +28,7 @@ const Live = ({ loginStatus }) => {
         {/* <ReactPlayer url="/assets/live-video/swimming.mp4" controls={true} autoPlay muted={true} /> */}
         <video autoPlay controls muted loop>
           <source
-            src={loginStatus ? "/assets/live-video/swimming.mp4" : ""}
+            src={user ? "/assets/live-video/swimming.mp4" : ""}
             type="video/mp4"
           />
         </video>

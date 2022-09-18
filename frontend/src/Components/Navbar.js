@@ -4,10 +4,13 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AiOutlineStar } from "react-icons/ai";
 import { BiLogOut } from "react-icons/bi";
 import { CgProfile } from "react-icons/cg";
-// import { Navigate } from 'react-router-dom'
 
-const Navbar = ({ loginStatus, setLoginStatus, handleSearchKey }) => {
-  // const [loggedIn, setLoggedIn] = useState(true);
+const Navbar = ({
+  user,
+  setUser,
+  setMessage,
+  handleSearchKey,
+}) => {
   const [showMenu, setShowMenu] = useState(true);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showLoginMenu, setShowLoginMenu] = useState(false);
@@ -20,15 +23,11 @@ const Navbar = ({ loginStatus, setLoginStatus, handleSearchKey }) => {
   const normalText =
     "block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-white dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700";
 
-  if (loginStatus) {
-    var ur = window.localStorage.getItem("loggedInOlympicsUser");
-    var user = JSON.parse(ur);
-  }
 
   return (
     <div className="left-0 dark">
       <nav className="bg-white px-2 sm:px-4 py-2.5 dark:bg-gray-900 fixed w-full z-20 top-0 left-0 border-b border-gray-200 dark:border-gray-600">
-        <div className="container flex flex-wrap justify-around md:justify-between items-center mx-auto">
+        <div className="container space-y-3 sm:space-y-0 flex flex-wrap sm:flex-nowrap sm:flex-row w-full justify-around md:justify-between items-center mx-auto">
           <Link to="/" className="flex items-center ">
             <img
               src="/olympics.png"
@@ -41,7 +40,7 @@ const Navbar = ({ loginStatus, setLoginStatus, handleSearchKey }) => {
           </Link>
 
           <div className="flex flex-row md:order-2 left-0 space-x-2">
-            {loginStatus ? (
+            {user !== null ? (
               <>
                 <button
                   className="flex text-sm p-1 bg-gray-800 rounded-full focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600"
@@ -108,8 +107,9 @@ const Navbar = ({ loginStatus, setLoginStatus, handleSearchKey }) => {
                       type="button"
                       onClick={(e) => {
                         e.preventDefault();
-                        setLoginStatus(false);
                         window.localStorage.removeItem("loggedInOlympicsUser");
+                        setUser(null);
+                        setMessage({ message: 'Logout successfully', className: 'success' })
                         navigate("/");
                       }}
                       className="inline-flex relative items-center py-2 px-4 w-full text-sm font-medium rounded-b-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white"
@@ -123,7 +123,7 @@ const Navbar = ({ loginStatus, setLoginStatus, handleSearchKey }) => {
             ) : (
               <>
                 <button
-                  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-thin lg:font-medium rounded-lg truncate text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                   onClick={() => {
                     setShowLoginMenu(!showLoginMenu);
                   }}
@@ -139,13 +139,14 @@ const Navbar = ({ loginStatus, setLoginStatus, handleSearchKey }) => {
                     setShowLoginMenu(false);
                   }}
                 >
-                  <ul className="py-1">
-                    <li>
+                  <ul className="py-1 w-full">
+                    <li >
                       <Link
                         to="/login"
                         className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                       >
-                        Login
+                        <img src="https://img.icons8.com/external-flaticons-lineal-color-flat-icons/64/000000/external-login-web-store-flaticons-lineal-color-flat-icons.png" alt=""/>
+                        <span>Login</span>
                       </Link>
                     </li>
                     <li>

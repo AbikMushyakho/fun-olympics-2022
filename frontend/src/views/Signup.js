@@ -4,17 +4,13 @@ import { Link, useNavigate } from "react-router-dom";
 import TextField from "../Components/TextField";
 import { signupValidationSchema } from "../FormValidation/validationSchema";
 import { signup } from "../services/users";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
-const Signup = () => {
+const Signup = ({setMessage}) => {
   const navigate = useNavigate();
   return (
     <div className="w-full flex justify-center py-8 ">
       <div className="p-4 w-full max-w-sm bg-white rounded-lg border border-gray-200 shadow-md sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700 ">
-        <ToastContainer />
         <Formik
-          onReset={console.log("form is being reset!!!")}
           initialValues={{
             username: "",
             email: "",
@@ -25,22 +21,18 @@ const Signup = () => {
             try {
               const response = await signup(data);
               if (response) {
-                toast.success(
-                  `Welcome ${response.username}. Please verify your email and continue!`,
-                  {
-                    autoClose: 2000
-                  }
-                );
+                resetForm({})
+                setMessage({message:`Welcome ${response.username}. Please verify your email and continue!`, className:'success' })
                 window.localStorage.setItem(
                   "signupEmail",
                   JSON.stringify(response.email)
                 );
-                  setInterval(() => {
+                 
                     navigate("/verify");    
-                  }, 200);            
+                     
               }
             } catch (error) {
-              toast.error(error.response.data.error);
+              setMessage({message:`${error.response.data.error}`, className:'warning' })
             }
           }}
           validationSchema={signupValidationSchema}

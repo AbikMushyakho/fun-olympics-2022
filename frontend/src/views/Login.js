@@ -4,33 +4,32 @@ import { Link, useNavigate } from "react-router-dom";
 import TextField from "../Components/TextField";
 import { loginValidationSchema } from "../FormValidation/validationSchema";
 import { login } from "../services/users";
-import { ToastContainer, toast } from "react-toastify";
 
-const Login = ({ setLoginStatus }) => {
+const Login = ({ setUser, setMessage }) => {
   const navigate = useNavigate();
   return (
     <div className="w-full flex justify-center py-8">
       <div className="p-4 w-full max-w-sm bg-white rounded-lg border border-gray-200 shadow-md sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
         <Formik
-          onReset={console.log("Form being reset")}
           initialValues={{ email: "", password: "" }}
           onSubmit={async (data, { resetForm }) => {
             try {
               const response = await login(data);
               if (response) {
                 resetForm({});
-                toast.success("Login Success!", {
-                  autoClose: 2000,
-                });
                 const user = JSON.stringify(response);
                 window.localStorage.setItem("loggedInOlympicsUser", user);
-                setLoginStatus(true);
+                setMessage({ message: 'Login successfully', className: 'success' })
+                setUser(response);
                 setTimeout(() => {
                   navigate("/live");
                 }, 2000);
               }
             } catch (error) {
-              toast.error(error.response.data.error);
+              setMessage({
+                message: `${error.response.data.error}`,
+                className: "error",
+              });
             }
           }}
           validationSchema={loginValidationSchema}
@@ -42,7 +41,6 @@ const Login = ({ setLoginStatus }) => {
                 onSubmit={handleSubmit}
                 autoComplete="off"
               >
-                <ToastContainer />
                 <h5 className="text-xl font-medium text-gray-900 dark:text-white">
                   Sign in to our platform
                 </h5>
@@ -94,7 +92,7 @@ const Login = ({ setLoginStatus }) => {
                     to="/forgetPw"
                     className="ml-auto text-sm text-blue-700 hover:underline dark:text-blue-500"
                   >
-                    Lost Password?
+                    Forget Password?
                   </Link>
                 </div>
                 <button
