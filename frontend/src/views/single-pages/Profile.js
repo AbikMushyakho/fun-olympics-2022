@@ -31,7 +31,7 @@ const Profile = () => {
             <div className="rounded  shadow p-6">
               <div className="pb-6">
                 <label
-                  for="name"
+                  htmlFor="name"
                   className="font-semibold text-gray-700 block pb-1 dark:text-gray-300"
                 >
                   Name
@@ -48,7 +48,7 @@ const Profile = () => {
               </div>
               <div className="pb-4">
                 <label
-                  for="about"
+                  htmlFor="about"
                   className="font-semibold text-gray-700 block pb-1 dark:text-gray-300  "
                 >
                   Email

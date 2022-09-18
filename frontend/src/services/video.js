@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = "/api/news";
+const baseUrl = "/api/video";
 
 let token = null;
 
@@ -24,4 +24,11 @@ const create = async (newObject) => {
   return response.data;
 };
 
-export { setToken, create, getAll, getOne };
+const update = async (id, newObject) => {
+  const config = {
+    headers: { Authorization: token },
+  };
+  const response = await axios.patch(`${baseUrl}/${id}`, newObject, config);
+  return response.data;
+};
+export { setToken, create, getAll, getOne, update };

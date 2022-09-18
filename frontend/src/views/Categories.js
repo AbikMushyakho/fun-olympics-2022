@@ -1,8 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import CategoryCard from "../Components/CategoryCard";
+import { getAllCategories } from "../services/category";
 
-const Categories = () => {
+const Categories = ({ setMessage }) => {
+  const [categories, setCategories] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const fetchedData = await getAllCategories();
+        setCategories(fetchedData);
+      } catch (error) {
+        setMessage({
+          message: `${error.response.data.error}`,
+          className: "error",
+        });
+      }
+    };
+    fetchData();
+  }, []);
   return (
     <>
       <div className="w-full flex flex-col">
@@ -12,7 +28,23 @@ const Categories = () => {
           </span>
         </div>
         <div className="grid grid-cols-1 grid-flow-row gap-4 md:grid-cols-3">
-          <CategoryCard
+
+        {categories.map((category, index) => {
+              return (
+                <CategoryCard
+                  key={category.id}
+                  details={{
+                    linkUrl: `/categories/${category.id}`,
+                    imgUrl: category.image,
+                    title: category.title,
+                    description:category.description
+                  }}
+                />
+              );
+          })}
+
+          {/* Static categories */}
+          {/* <CategoryCard
             details={{
               linkUrl: "/categories/1",
               imgUrl: "/assets/category/swimming.jpg",
@@ -44,7 +76,7 @@ const Categories = () => {
             sport, basketball was held as a demonstration event in 1904. The
             United States are the defending champions in both.`,
             }}
-          />
+          /> */}
         </div>
       </div>
       <Outlet />

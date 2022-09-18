@@ -1,9 +1,43 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import CategoryCard from "../Components/CategoryCard";
 import NewsCard from "../Components/NewsCard";
+import { getAll } from "../services/news";
+import { getAllCategories } from "../services/category";
 
-const Home = () => {
+const Home = ({ setMessage }) => {
+  const [news, setNews] = useState([]);
+  const [categories, setCategories] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const fetchedData = await getAllCategories();
+        setCategories(fetchedData);
+      } catch (error) {
+        setMessage({
+          message: `${error.response.data.error}`,
+          className: "error",
+        });
+      }
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const fetchedData = await getAll();
+        setNews(fetchedData);
+      } catch (error) {
+        setMessage({
+          message: `${error.response.data.error}`,
+          className: "error",
+        });
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <div className="w-full flex flex-col ">
       <div className=" flex flex-col lg:flex-row justify-center ">
@@ -40,7 +74,23 @@ const Home = () => {
         <hr className=" mt-4 h-1" />
 
         <div className="grid grid-cols-1 grid-flow-row gap-4 md:grid-cols-3 mt-8">
-          <CategoryCard
+          {categories.map((category, index) => {
+            if (index < 6)
+              return (
+                <CategoryCard
+                  key={category.id}
+                  details={{
+                    linkUrl: `/categories/${category.id}`,
+                    imgUrl: category.image,
+                    title: category.title,
+                    description: category.description,
+                  }}
+                />
+              );
+          })}
+
+          {/* Static categories */}
+          {/* <CategoryCard
             details={{
               linkUrl: "/categories/1",
               imgUrl: "/assets/category/swimming.jpg",
@@ -72,7 +122,7 @@ const Home = () => {
             sport, basketball was held as a demonstration event in 1904. The
             United States are the defending champions in both.`,
             }}
-          />
+          /> */}
         </div>
       </div>
       {/* News */}
@@ -83,7 +133,21 @@ const Home = () => {
         <hr className=" mt-4 h-1" />
 
         <div className="grid grid-cols-1 grid-flow-row gap-4 md:grid-cols-3 mt-8">
-          <NewsCard
+          {news.map((singleNews, index) => {
+            if (index < 6)
+              return (
+                <NewsCard
+                  key={singleNews.id}
+                  details={{
+                    linkUrl: `/news/${singleNews.id}`,
+                    imgUrl: singleNews.image,
+                    title: singleNews.title,
+                  }}
+                />
+              );
+          })}
+          {/* Static News */}
+          {/* <NewsCard
             details={{
               linkUrl: "/news/1",
               imgUrl: "/assets/news/news-1.jpg",
@@ -104,7 +168,7 @@ const Home = () => {
               imgUrl: "/assets/news/news-3.webp",
               title: `Canada Women’s Ice Hockey: Beijing2022 Medal Moments﻿`,
             }}
-          />
+          /> */}
         </div>
       </div>
     </div>

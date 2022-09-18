@@ -20,7 +20,7 @@ const VideoCard = ({ details }) => {
           </Link>
         </div>
         <div className="p-5">
-          <Link to="/categories/1/1">
+          <Link to={linkUrl}>
             <h5 className="mb-2 text-xl tracking-tight text-gray-900 hover:underline dark:text-white">
               {title}
             </h5>

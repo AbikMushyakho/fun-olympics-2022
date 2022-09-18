@@ -66,7 +66,7 @@ function App() {
         <div className="mt-14 px-10 py-10 dark:bg-gray-900  text-wheatt ">
         {message && <Notification notify={message} />  }
           <Routes>
-            <Route index element={<Home />} />
+            <Route index element={<Home setMessage={setMessage}/>} />
             <Route
               path="login"
               element={<Login setUser={setUser} setMessage={setMessage} />}
@@ -76,11 +76,11 @@ function App() {
             <Route path="search" element={<Search searchText={searchText} />} />
             <Route path="profile" element={<Profile />} />
             <Route path="news">
-              <Route index element={<News />} />
+              <Route index element={<News setMessage={setMessage} />} />
               <Route path=":id" element={<SingleNews />} />
             </Route>
             <Route path="categories">
-              <Route index element={<Categories />} />
+              <Route index element={<Categories setMessage={setMessage} />} />
               <Route path=":id">
                 <Route index element={<SingleCategory />} />
                 <Route

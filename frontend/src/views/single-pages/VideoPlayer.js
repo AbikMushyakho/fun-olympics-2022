@@ -1,20 +1,51 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import ResponsivePlayer from "../../Components/ResponsivePlayer";
 import VideoCard from "../../Components/VideoCard";
+import { getOne } from "../../services/video";
 
-const VideoPlayer = ({ user ,setMessage}) => {
+const VideoPlayer = ({ user, setMessage }) => {
+  const [video, setVideo] = useState({});
   const navigate = useNavigate();
- 
+  const { id } = useParams();
+  console.log(id);
 
   const [played, setPlayed] = useState(0);
 
   useEffect(() => {
-    if (user === null) {
-      setMessage({message:'Must login to watch live videos!!', className:'warning'})
-      navigate("/login");
+    let loggedUser = null;
+    if (user !== null) {
+      loggedUser = user;
+    } else {
+      const localUser = window.localStorage.getItem("loggedInOlympicsUser");
+      loggedUser = JSON.parse(localUser);
     }
+
+    if (loggedUser === null) {
+      setMessage({
+        message: "Must login to watch live videos!!",
+        className: "warning",
+      });
+      navigate("/login");
+    } else {
+      const fetchData = async (id) => {
+        try {
+          const fetchedData = await getOne(id);
+          console.log(fetchedData);
+          setVideo(fetchedData);
+        } catch (error) {
+          setMessage({
+            message: `${error.response.data.error}`,
+            className: "warning",
+          });
+        }
+      };
+      fetchData(id);
+    }
+  }, []);
+
+  useEffect(() => {
     // title can be the fetched video title
     document.title = "Video player";
     return () => {

@@ -145,8 +145,7 @@ const Navbar = ({
                         to="/login"
                         className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                       >
-                        <img src="https://img.icons8.com/external-flaticons-lineal-color-flat-icons/64/000000/external-login-web-store-flaticons-lineal-color-flat-icons.png" alt=""/>
-                        <span>Login</span>
+                       Login
                       </Link>
                     </li>
                     <li>
