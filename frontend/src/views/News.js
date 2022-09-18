@@ -2,14 +2,18 @@ import React, { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import NewsCard from "../Components/NewsCard";
 import { getAll } from "../services/news";
+import Loading from "../Components/Loading";
+import NotExists from "../Components/NotExists";
 
 const News = ({ setMessage }) => {
   const [news, setNews] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const fetchedData = await getAll();
         setNews(fetchedData);
+        setIsLoading(false)
       } catch (error) {
         setMessage({
           message: `${error.response.data.error}`,
@@ -28,8 +32,12 @@ const News = ({ setMessage }) => {
             News
           </span>
         </div>
-        <div className="grid grid-cols-1 grid-flow-row gap-4 md:grid-cols-3">
-          {news.map((singleNews, index) => {
+
+        {isLoading ? (
+          <Loading />
+        ) : news.length > 0 ? (
+          <div className="grid grid-cols-1 grid-flow-row gap-4 md:grid-cols-3">
+            {news.map((singleNews, index) => {
               return (
                 <NewsCard
                   key={singleNews.id}
@@ -40,31 +48,34 @@ const News = ({ setMessage }) => {
                   }}
                 />
               );
-          })}
-          {/* static data */}
-          {/* <NewsCard
-            details={{
-              linkUrl: "/news/1",
-              imgUrl: "/assets/news/news-1.jpg",
-              title: `French breakers set the scene for Paris 2024 Olympic Games |
-                Breaking Life`,
-            }}
-          />
-          <NewsCard
-            details={{
-              linkUrl: "/news/1",
-              imgUrl: "/assets/news/news-2.webp",
-              title: `Key storylines from the 2022 Diamond League Final in Zurich`,
-            }}
-          />
-          <NewsCard
-            details={{
-              linkUrl: "/news/3",
-              imgUrl: "/assets/news/news-3.webp",
-              title: `Canada Women’s Ice Hockey: Beijing2022 Medal Moments﻿`,
-            }}
-          /> */}
-        </div>
+            })}
+            {/* static data */}
+            {/* <NewsCard
+    details={{
+      linkUrl: "/news/1",
+      imgUrl: "/assets/news/news-1.jpg",
+      title: `French breakers set the scene for Paris 2024 Olympic Games |
+        Breaking Life`,
+    }}
+  />
+  <NewsCard
+    details={{
+      linkUrl: "/news/1",
+      imgUrl: "/assets/news/news-2.webp",
+      title: `Key storylines from the 2022 Diamond League Final in Zurich`,
+    }}
+  />
+  <NewsCard
+    details={{
+      linkUrl: "/news/3",
+      imgUrl: "/assets/news/news-3.webp",
+      title: `Canada Women’s Ice Hockey: Beijing2022 Medal Moments﻿`,
+    }}
+  /> */}
+          </div>
+        ) : (
+          <NotExists name="news" />
+        )}
       </div>
       <Outlet />
     </>

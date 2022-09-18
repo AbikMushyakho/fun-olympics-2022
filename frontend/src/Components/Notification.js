@@ -1,23 +1,34 @@
 import React from "react";
 import { toast, ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 
 const Notification = ({ notify }) => {
-  if (notify && notify.message) {
-    if (notify.className === "success") {
-      toast.success(notify.message, {
+  const { className, message } = notify;
+
+  if (message === "undefined") {
+    toast.error("Internal server error 500", {
+      autoClose: 2000,
+    });
+  } else if (message === "token expired") {
+    window.localStorage.clear();
+    toast.warning(message, {
+      autoClose: 2000,
+    });
+  } else if (className && message !== "undefined") {
+    if (className === "success") {
+      toast.success(message, {
         autoClose: 2000,
       });
-    } else if (notify.className === "info") {
-      toast.info(notify.message, {
+    } else if (className === "info") {
+      toast.info(message, {
         autoClose: 2000,
       });
-    } else if (notify.className === "warning") {
-      toast.warning(notify.message, {
+    } else if (className === "warning") {
+      toast.warning(message, {
         autoClose: 2000,
       });
-    } else if (notify.className === "error") {
-      toast.error(notify.message, {
+    } else if (className === "error") {
+      toast.error(message, {
         autoClose: 2000,
       });
     }

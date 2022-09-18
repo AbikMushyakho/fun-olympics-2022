@@ -13,6 +13,10 @@ const videoSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "users",
   },
+  addedDate: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 videoSchema.set("toJSON", {

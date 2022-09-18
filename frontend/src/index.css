@@ -16,17 +16,17 @@ code {
     monospace;
 }
 
-.live-video video::-webkit-media-controls-timeline
-{
+.live-video video::-webkit-media-controls-timeline {
   display: none;
 }
+
 .live-video video::-webkit-media-controls-current-time-display {
   display: none;
 }
 
 .player-wrapper {
   position: relative;
-  padding-top: 56.25% 
+  padding-top: 56.25%;
   /* Player ratio: 100 / (1280 / 720) */
 }
 
@@ -34,4 +34,11 @@ code {
   position: absolute;
   top: 0;
   left: 0;
+}
+
+@media screen and (min-width: 1024px) {
+  .player-wrapper {
+    padding-top: 48.25%;
+    /* Player ratio: 100 / (1280 / 720) */
+  }
 }

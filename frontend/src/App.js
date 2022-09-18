@@ -63,7 +63,7 @@ function App() {
         />
 
 
-        <div className="mt-14 px-10 py-10 dark:bg-gray-900  text-wheatt ">
+        <div className="mt-14 px-10 py-10 dark:bg-gray-900 min-h-screen text-wheatt ">
         {message && <Notification notify={message} />  }
           <Routes>
             <Route index element={<Home setMessage={setMessage}/>} />
@@ -73,7 +73,7 @@ function App() {
             />
             <Route path="signup" element={<Signup setMessage={setMessage} />} />
             <Route path="verify" element={<Verify />} />
-            <Route path="search" element={<Search searchText={searchText} />} />
+            <Route path="search" element={<Search searchText={searchText} setMessage={setMessage} />} />
             <Route path="profile" element={<Profile />} />
             <Route path="news">
               <Route index element={<News setMessage={setMessage} />} />
@@ -102,7 +102,7 @@ function App() {
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </div>
-        <div className="p-4 bg-white  w-full h-auto shadow md:px-6 md:py-8 dark:bg-gray-900">
+        <div className="p-4 bg-white bottom-0 w-full shadow md:px-6 md:py-8 dark:bg-gray-900">
           <Footer />
         </div>
       </Router>

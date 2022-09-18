@@ -3,15 +3,18 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import ResponsivePlayer from "../../Components/ResponsivePlayer";
 import VideoCard from "../../Components/VideoCard";
-import { getOne } from "../../services/video";
-
+import { getAll, getOne } from "../../services/video";
+import Moment from "react-moment";
+import Loading from "../../Components/Loading";
+import NotExists from "../../Components/NotExists";
 const VideoPlayer = ({ user, setMessage }) => {
   const [video, setVideo] = useState({});
-  const navigate = useNavigate();
-  const { id } = useParams();
-  console.log(id);
-
   const [played, setPlayed] = useState(0);
+  const { id } = useParams();
+  const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
+  console.log(id);
+  const [related, setRelated] = useState([]);
 
   useEffect(() => {
     let loggedUser = null;
@@ -29,11 +32,15 @@ const VideoPlayer = ({ user, setMessage }) => {
       });
       navigate("/login");
     } else {
-      const fetchData = async (id) => {
+      const fetchVideo = async (id) => {
         try {
-          const fetchedData = await getOne(id);
-          console.log(fetchedData);
-          setVideo(fetchedData);
+          const fetchedVideo = await getOne(id);
+          console.log(fetchedVideo);
+          const allVideo = await getAll();
+          setVideo(fetchedVideo);
+          const filtered = allVideo.filter((v) => v.id !== id);
+          setRelated(filtered);
+          setIsLoading(false);
         } catch (error) {
           setMessage({
             message: `${error.response.data.error}`,
@@ -41,7 +48,7 @@ const VideoPlayer = ({ user, setMessage }) => {
           });
         }
       };
-      fetchData(id);
+      fetchVideo(id);
     }
   }, []);
 
@@ -64,18 +71,33 @@ const VideoPlayer = ({ user, setMessage }) => {
   return (
     <div>
       <div className="w-full flex flex-col">
-        <ResponsivePlayer
-          url={user ? "/assets/live-video/swimming.mp4" : ""}
-          onProgress={handleWatchTime}
-        />
-        <div className="text-wheatt font-bold py-2 md:my-2">
-          <span className="text-sm md:text-3xl">
-            Michael Phelps Last Olympic Race - Swimming Men's 4x100m Medley
-            Relay Final | Rio
-          </span>
-          <br />
-          <span>Played:{played} </span>
-        </div>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <>
+            <ResponsivePlayer
+              url={video.video_url}
+              onProgress={handleWatchTime}
+            />
+            <div className="text-gray-700 dark:text-gray-400 py-2 md:my-2 flex flex-col space-y-1">
+              <span className="text-wheatt text-sm md:text-3xl font-bold">
+                {video.title}
+              </span>
+
+              <span>
+                {video.views} views * <Moment fromNow>{video.addedDate}</Moment>{" "}
+              </span>
+
+              <hr />
+
+              <p>
+                {video.uploader.username}
+                {video.description}
+              </p>
+              <span>Played:{played} </span>
+            </div>
+          </>
+        )}
 
         <div className="my-6">
           <span className="text-wheatt font-bold md:text-2xl lg:text-3xl">
@@ -84,17 +106,26 @@ const VideoPlayer = ({ user, setMessage }) => {
           <hr className=" mt-4 h-1" />
         </div>
 
-        <div className="grid grid-cols-1 grid-flow-row gap-4 md:grid-cols-3">
-          <VideoCard
-            details={{
-              title:
-                "Michael Phelps Last Olympic Race - Swimming Men's 4x100m Medley Relay Final | Rio",
-              thumbnailUrl: "/assets/thumbnails/swimming.jpg",
-              linkUrl: "/categories/1/1",
-              videoUrl: "/assets/live-video/swimming.mp4",
-            }}
-          />
-        </div>
+        {related.length > 0 ? (
+          <div className="grid grid-cols-1 grid-flow-row gap-4 md:grid-cols-3">
+            {related.map((video, index) => {
+              return (
+                <VideoCard
+                  key={index}
+                  details={{
+                    title: video.title,
+                    linkUrl: `/categories/${video.category}/${video.id}`,
+                    videoUrl: video.video_url,
+                    views: video.views,
+                    addedDate: video.addedDate,
+                  }}
+                />
+              );
+            })}
+          </div>
+        ) : (
+          <NotExists name="related videos" />
+        )}
       </div>
     </div>
   );

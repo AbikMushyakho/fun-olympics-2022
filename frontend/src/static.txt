@@ -1,0 +1,80 @@
+ {/* Static news */}
+          {/* <NewsCard
+    details={{
+      linkUrl: "/news/1",
+      imgUrl: "/assets/news/news-2.webp",
+      title: `Key storylines from the 2022 Diamond League Final in Zurich`,
+    }}
+  />
+  <NewsCard
+    details={{
+      linkUrl: "/news/3",
+      imgUrl: "/assets/news/news-3.webp",
+      title: `Canada Women’s Ice Hockey: Beijing2022 Medal Moments﻿`,
+    }}
+  /> */}
+
+
+   {/* Static categories */}
+      {/* <CategoryCard
+            details={{
+              linkUrl: "/categories/1",
+              imgUrl: "/assets/category/swimming.jpg",
+              title: "Swimming",
+              description: `Swimming has been a sport at every modern Summer Olympics. It has been open 
+                to women since 1912. Swimming has the second-highest number of Olympic medal 
+                contested events after athletics.`,
+              }}
+          />
+          <CategoryCard
+            details={{
+              linkUrl: "/categories/1",
+              imgUrl: "/assets/category/badminton.jpg",
+              title: "Badminton",
+              description: `Badminton had its debut as an official event on the 1992 Summer
+            Olympics and has been contested in eight Olympiads. 74 different
+            nations have appeared in the Olympic badminton competitions,
+            with 18 appearing all eight times.`,
+            }}
+          />
+          <CategoryCard
+            details={{
+              linkUrl: "/categories/3",
+              imgUrl: "/assets/category/basketball.jpg",
+              title: "Basketball",
+              description: `Basketball at the Summer Olympics has been a sport for men
+            consistently since 1936. Prior to its inclusion as a medal
+            sport, basketball was held as a demonstration event in 1904. The
+            United States are the defending champions in both.`,
+            }}
+          /> */}
+
+
+            {/* Static Videos */}
+            {/* <VideoCard
+    details={{
+      title:
+        "Michael Phelps Last Olympic Race - Swimming Men's 4x100m Medley Relay Final | Rio",
+      thumbnailUrl: "/assets/thumbnails/swimming.jpg",
+      linkUrl: "/categories/1/1",
+      videoUrl: "/assets/live-video/swimming.mp4",
+    }}
+  />
+  <VideoCard
+    details={{
+      title:
+        "Michael Phelps Last Olympic Race - Swimming Men's 4x100m Medley Relay Final | Rio",
+      thumbnailUrl: "/assets/thumbnails/swimming.jpg",
+      linkUrl: "/categories/1/1",
+      videoUrl: "/assets/live-video/swimming.mp4",
+    }}
+  />
+  <VideoCard
+    details={{
+      title:
+        "Michael Phelps Last Olympic Race - Swimming Men's 4x100m Medley Relay Final | Rio",
+      thumbnailUrl: "/assets/thumbnails/swimming.jpg",
+      linkUrl: "/categories/1/1",
+      videoUrl: "/assets/live-video/swimming.mp4",
+    }}
+  /> */}
