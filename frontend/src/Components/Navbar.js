@@ -107,7 +107,7 @@ const Navbar = ({
                       type="button"
                       onClick={(e) => {
                         e.preventDefault();
-                        window.localStorage.removeItem("loggedInOlympicsUser");
+                        window.localStorage.clear();
                         setUser(null);
                         setMessage({ message: 'Logout successfully', className: 'success' })
                         navigate("/");

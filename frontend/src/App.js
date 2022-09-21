@@ -22,19 +22,21 @@ import Verify from "./views/Verify";
 import { useEffect, useState } from "react";
 import Search from "./views/single-pages/Search";
 import Profile from "./views/single-pages/Profile";
-import { setToken } from "./services/news";
+import { setToken } from "./services/token";
 import Notification from "./Components/Notification";
+import EditUser from "./views/panel/Pages/edit/EditUser";
+import ViewUser from "./views/panel/Pages/viewDetails/ViewUser";
 
 function App() {
   const [user, setUser] = useState(null);
   const [searchText, setSearchText] = useState({ query: "" });
-  const [message,setMessage] = useState(null)
+  const [message, setMessage] = useState(null);
 
-  if(message !== null){
+  if (message !== null) {
     setTimeout(() => {
-      setMessage(null)
-    }, 5000)
-  } 
+      setMessage(null);
+    }, 5000);
+  }
 
   const handleSearchKey = (event) => {
     event.preventDefault();
@@ -49,8 +51,7 @@ function App() {
       setUser(parsedUser);
       setToken(parsedUser.token);
     }
-  },[]);
-
+  }, []);
 
   return (
     <div className="App left-0 dark">
@@ -62,18 +63,22 @@ function App() {
           handleSearchKey={handleSearchKey}
         />
 
-
-        <div className="mt-14 px-10 py-10 dark:bg-gray-900 min-h-screen text-wheatt ">
-        {message && <Notification notify={message} />  }
+        <div className="mt-14 relative overflow-y-auto p-4  md:px-10 py-10 dark:bg-gray-900 min-h-screen text-wheatt ">
+          {message && <Notification notify={message} />}
           <Routes>
-            <Route index element={<Home setMessage={setMessage}/>} />
+            <Route index element={<Home setMessage={setMessage} />} />
             <Route
               path="login"
               element={<Login setUser={setUser} setMessage={setMessage} />}
             />
             <Route path="signup" element={<Signup setMessage={setMessage} />} />
             <Route path="verify" element={<Verify />} />
-            <Route path="search" element={<Search searchText={searchText} setMessage={setMessage} />} />
+            <Route
+              path="search"
+              element={
+                <Search searchText={searchText} setMessage={setMessage} />
+              }
+            />
             <Route path="profile" element={<Profile />} />
             <Route path="news">
               <Route index element={<News setMessage={setMessage} />} />
@@ -89,20 +94,37 @@ function App() {
                 />
               </Route>
             </Route>
-            <Route path="live" element={<Live user={user} setMessage={setMessage} />} />
+            <Route
+              path="live"
+              element={<Live user={user} setMessage={setMessage} />}
+            />
             <Route path="panel">
-              <Route index element={<Dashboard />} />
-              <Route path="users" element={<Users />} />
-              <Route path="categories" element={<AdminCategories />} />
-              <Route path="videos" element={<AdminVideos />} />
-              <Route path="highlights" element={<AdminHighlights />} />
-              <Route path="news" element={<AdminNews />} />
-              <Route path="analytics" element={<Analytics />} />
+              <Route index element={<Dashboard setMessage={setMessage} />} />
+              <Route path="users">
+                <Route index element={<Users setMessage={setMessage}/>} />
+                <Route
+                  path=":id"
+                  element={<ViewUser setMessage={setMessage} />}
+                />
+                <Route
+                  path="edit/:id"
+                  element={<EditUser setMessage={setMessage} />}
+                />
+              </Route>
+              <Route path="categories">
+                <Route index element={<AdminCategories setMessage={setMessage} />} />
+                <Route path=":id" element={<AdminCategories  setMessage={setMessage}/>} />
+                <Route path="edit/:id" element={<AdminCategories setMessage={setMessage} />} />
+              </Route>
+              <Route path="videos" element={<AdminVideos setMessage={setMessage}/>} />
+              <Route path="highlights" element={<AdminHighlights  setMessage={setMessage}/>} />
+              <Route path="news" element={<AdminNews setMessage={setMessage} />} />
+              <Route path="analytics" element={<Analytics  setMessage={setMessage}/>} />
             </Route>
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </div>
-        <div className="p-4 bg-white bottom-0 w-full shadow md:px-6 md:py-8 dark:bg-gray-900">
+        <div className="p-4 bg-white relative shadow md:px-6 md:py-8 dark:bg-gray-900">
           <Footer />
         </div>
       </Router>

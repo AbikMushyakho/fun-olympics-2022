@@ -3,10 +3,12 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import TextField from "../Components/TextField";
 import { loginValidationSchema } from "../FormValidation/validationSchema";
-import { login } from "../services/users";
+import { login } from "../services/loginSignup";
+import { setToken} from "../services/token";
 
 const Login = ({ setUser, setMessage }) => {
   const navigate = useNavigate();
+
   return (
     <div className="w-full flex justify-center py-8">
       <div className="p-4 w-full max-w-sm bg-white rounded-lg border border-gray-200 shadow-md sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
@@ -17,13 +19,12 @@ const Login = ({ setUser, setMessage }) => {
               const response = await login(data);
               if (response) {
                 resetForm({});
+                setToken(response.token);
                 const user = JSON.stringify(response);
                 window.localStorage.setItem("loggedInOlympicsUser", user);
                 setMessage({ message: 'Login successfully', className: 'success' })
                 setUser(response);
-                setTimeout(() => {
                   navigate("/live");
-                }, 2000);
               }
             } catch (error) {
               setMessage({

@@ -3,7 +3,7 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import TextField from "../Components/TextField";
 import { signupValidationSchema } from "../FormValidation/validationSchema";
-import { signup } from "../services/users";
+import { signup } from "../services/loginSignup";
 
 const Signup = ({setMessage}) => {
   const navigate = useNavigate();

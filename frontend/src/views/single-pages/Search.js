@@ -9,6 +9,7 @@ import NotExists from "../../Components/NotExists";
 const Search = ({ searchText,setMessage }) => {
   const [news, setNews] = useState([]);
   const [categories, setCategories] = useState([]);
+  // const [filteredNews,setFil]
   const [isLoading, setIsLoading] = useState({
     category: true,
     news: true,
@@ -18,6 +19,7 @@ const Search = ({ searchText,setMessage }) => {
       try {
         const fetchedCategories = await getAllCategories();
         const fetchedNews = await getAll();
+        // const fetchVideos = await
         setCategories(fetchedCategories);
         setNews(fetchedNews);
         setIsLoading({ category: false, news: false });

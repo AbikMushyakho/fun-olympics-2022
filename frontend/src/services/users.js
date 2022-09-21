@@ -1,29 +1,22 @@
 import axios from "axios";
+import { getToken } from "./token";
 
+const token = getToken();
 const baseUrl = "/api/users";
-const loginUrl = "/api/login";
-
-const login = async (credentials) => {
-  const response = await axios.post(loginUrl, credentials);
+const config = {
+  headers: { Authorization: `${token}` },
+};
+const getAll = async () => {
+  const response = await axios.get(baseUrl, config);
   return response.data;
 };
-const signup = async (credentials) => {
-  const response = await axios.post(baseUrl, credentials);
-  return response.data;
-};
-
-const verify = async ({ email, code }) => {
-  const response = await axios.post(`${baseUrl}/verify`, { email, code });
-  return response.data;
-};
-
-const getAll =async ()=>{
-  const response =await axios.get(baseUrl);
-  return response.data;
-}
 const getOne = async (id) => {
-  const response = await axios.get(`${baseUrl}/${id}`);
+  const response = await axios.get(`${baseUrl}/${id}`, config);
+  return response.data;
+};
+const update = async (id, newData) => {
+  const response = await axios.patch(`${baseUrl}/${id}`, newData, config);
   return response.data;
 };
 
-export { login, signup, verify ,getAll, getOne};
+export { getAll, getOne, update };

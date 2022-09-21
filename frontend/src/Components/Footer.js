@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     
 
-       <footer >
+       <footer className="relative">
         <div className="sm:flex sm:items-center sm:justify-between">
           <Link
             to="/"

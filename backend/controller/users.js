@@ -8,12 +8,19 @@ const userRouter = express.Router();
 
 userRouter.get("/", async (request, response) => {
   // Can use populate  like .populate('favourites')
-  const users = await User.find({}).populate("video");
+  const users = await User.find({}).populate("favourites");
   response.status(200).json(users);
 });
+userRouter.get("/:id", async (request, response) => {
+  const found = await User.findById(request.params.id).populate("favourites");
 
+  found
+    ? response.status(200).json(found)
+    : response.status(404).json({ error: "user not found!" }).end();
+});
 userRouter.post("/", async (request, response) => {
   const { username, email, password } = request.body;
+
   if (!((username || email) && password)) {
     return response.status(400).json({
       error: "username , email and password are required!",
@@ -68,6 +75,46 @@ userRouter.post("/verify", async (request, response) => {
     return response.status(400).json({
       error: "email not found!",
     });
+  }
+});
+
+userRouter.patch("/:id", async (request, response) => {
+  const { id } = request.params;
+  const user = request.user;
+  const token = request.token;
+  if (!(user && token)) {
+    return response.status(401).json({ error: "Token missing or invalid!" });
+  }
+
+  const { username, email, password } = request.body;
+  let passwordHash = null;
+  if (user.id === id || user.isAdmin) {
+    password === undefined || password === ""
+      ? (passwordHash = null)
+      : (passwordHash = Bcrypt.hashSync(password, 10));
+    const newData =
+      passwordHash === null
+        ? { username, email }
+        : { username, email, passwordHash };
+    const findAndUpdate = await User.findByIdAndUpdate(id, newData, {
+      runValidators: true,
+    });
+    const updatedUser = await User.findById(id);
+    findAndUpdate
+      ? response.status(200).json(updatedUser)
+      : response
+          .status(400)
+          .json({
+            error: "Failed to update! Try again later",
+          })
+          .end();
+  } else {
+    response
+      .status(401)
+      .json({
+        error: "Unauthorized update!",
+      })
+      .end();
   }
 });
 
