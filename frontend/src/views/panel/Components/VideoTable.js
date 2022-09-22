@@ -158,7 +158,7 @@ const VideoTable = ({ setMessage }) => {
       responsive
       theme="solarized"
       onRowClicked={(row) => {
-        navigate(`/panel/video/${row.id}`);
+        navigate(`/categories/${row.category.id}/${row.id}`);
       }}
     />
   );

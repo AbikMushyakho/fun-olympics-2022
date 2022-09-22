@@ -1,31 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BiMenu, BiSearch } from "react-icons/bi";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AiOutlineStar } from "react-icons/ai";
 import { BiLogOut } from "react-icons/bi";
 import { CgProfile } from "react-icons/cg";
 
-const Navbar = ({
-  user,
-  setUser,
-  setMessage,
-  handleSearchKey,
-}) => {
+const Navbar = ({ user, setUser, setMessage, handleSearchKey }) => {
   const [showMenu, setShowMenu] = useState(true);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showLoginMenu, setShowLoginMenu] = useState(false);
+  const [showNavbar, setShowNavbar] = useState(true);
   const location = useLocation();
   const navigate = useNavigate();
   const path = location.pathname;
+  useEffect(() => {
+    if (path.match("panel")) {
+      setShowNavbar(false);
+    }else{
+      setShowNavbar(true);
+    }
+  }, [path]);
 
   const lightText =
     "block py-2 pr-4 pl-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white";
   const normalText =
     "block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-white dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700";
 
-
   return (
-    <div className="left-0 dark">
+    <div className={`${showNavbar ? "block mb-14" : "hidden mb-0"}  left-0 dark`}>
       <nav className="bg-white px-2 sm:px-4 py-2.5 dark:bg-gray-900 fixed w-full z-20 top-0 left-0 border-b border-gray-200 dark:border-gray-600">
         <div className="container space-y-3 sm:space-y-0 flex flex-wrap sm:flex-nowrap sm:flex-row w-full justify-around md:justify-between items-center mx-auto">
           <Link to="/" className="flex items-center ">
@@ -81,21 +83,24 @@ const Navbar = ({
                       <CgProfile className="mr-2 w-4 h-4 fill-current" />
                       Profile
                     </Link>
-                    <Link
-                      to="/profile"
-                      className="inline-flex relative items-center py-2 px-4 w-full text-sm font-medium border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white"
-                    >
-                      <svg
-                        aria-hidden="true"
-                        className="mr-2 w-4 h-4 fill-current"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg"
+                    {user.isAdmin && (
+                      <Link
+                        to="/panel"
+                        className="inline-flex relative items-center py-2 px-4 w-full text-sm font-medium border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white"
                       >
-                        <path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z"></path>
-                      </svg>
-                      Settings
-                    </Link>
+                        <svg
+                          aria-hidden="true"
+                          className="mr-2 w-4 h-4 fill-current"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z"></path>
+                        </svg>
+                        Admin Panel
+                      </Link>
+                    )}
+
                     <Link
                       to="/favourites"
                       className="inline-flex relative items-center py-2 px-4 w-full text-sm font-medium border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white"
@@ -109,7 +114,10 @@ const Navbar = ({
                         e.preventDefault();
                         window.localStorage.clear();
                         setUser(null);
-                        setMessage({ message: 'Logout successfully', className: 'success' })
+                        setMessage({
+                          message: "Logout successfully",
+                          className: "success",
+                        });
                         navigate("/");
                       }}
                       className="inline-flex relative items-center py-2 px-4 w-full text-sm font-medium rounded-b-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white"
@@ -140,12 +148,12 @@ const Navbar = ({
                   }}
                 >
                   <ul className="py-1 w-full">
-                    <li >
+                    <li>
                       <Link
                         to="/login"
                         className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                       >
-                       Login
+                        Login
                       </Link>
                     </li>
                     <li>

@@ -18,7 +18,7 @@ const CategoryTable = ({ setMessage }) => {
       setFiltered(fetchedCategories);
     } catch (error) {
       setMessage({
-        message: `${error.response.data.error}`,
+        message: `${error.response.data.error || error.message}`,
         className: "error",
       });
     }
@@ -133,7 +133,7 @@ const CategoryTable = ({ setMessage }) => {
       responsive
       theme="solarized"
       onRowClicked={(row) => {
-        navigate(`/panel/category/${row.id}`);
+        navigate(`/categories/${row.id}`);
       }}
     />
   );

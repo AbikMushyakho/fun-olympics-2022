@@ -1,12 +1,14 @@
 import User from "../models/user.js";
-import express from "express";
+import express, { response } from "express";
 import Bcrypt from "bcrypt";
 import mailSender from "../auth/mailSender.js";
 import Mail from "../models/mail.js";
+import { checkAdmin } from "../utils/middleware.js";
+
 
 const userRouter = express.Router();
 
-userRouter.get("/", async (request, response) => {
+userRouter.get("/", checkAdmin, async (request, response) => {
   // Can use populate  like .populate('favourites')
   const users = await User.find({}).populate("favourites");
   response.status(200).json(users);
@@ -117,5 +119,29 @@ userRouter.patch("/:id", async (request, response) => {
       .end();
   }
 });
+
+userRouter.patch("/fav/:id",async(request,response)=>{
+  const { id } = request.params;
+  const user = request.user;
+  const token = request.token;
+  if (!(user && token)) {
+    return response.status(401).json({ error: "Token missing or invalid!" });
+  }
+
+  // const body = request.body;
+  const videoId = request.body.videoId.toString()
+  const prevFav = [...user.favourites]
+  const exists =   prevFav.filter((fav)=> String(fav)===String(videoId))
+  if(exists.length >0){
+    return response.status(401).json({ error: "Video has been already added to favourites!" });
+  }
+ let favourites= [...prevFav,videoId]
+
+  console.log(favourites)
+  user.favourites = favourites
+  await user.save(); 
+
+
+})
 
 export default userRouter;

@@ -3,7 +3,7 @@ import Category from "../models/category.js";
 import { SECRET } from "../utils/config.js";
 import jwt from "jsonwebtoken";
 import { uploadImage } from "../utils/multer.js";
-import { checkAdmin } from "../utils/middleware.js";
+import { checkAdmin,setFileType } from "../utils/middleware.js";
 import { categoryExists } from "../utils/existsMiddleware.js";
 const categoryRouter = Router();
 
@@ -14,6 +14,7 @@ categoryRouter.get("/", async (request, response) => {
 
 categoryRouter.post(
   "/",
+  setFileType,
   checkAdmin,
   uploadImage,
   categoryExists,
@@ -22,6 +23,9 @@ categoryRouter.post(
     const token = request.token;
     const user = request.user;
     let imagePath;
+    if(request.file ===undefined){
+      return response.status(401).json({ error: "File is missing!" }).end();
+    }
     const { path } = request.file;
     if (path) {
       imagePath = path.replace("public", "");

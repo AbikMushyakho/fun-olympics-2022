@@ -2,7 +2,6 @@ import { info, errors } from "../utils/logger.js";
 import jwt from "jsonwebtoken";
 import { SECRET } from "./config.js";
 import User from "../models/user.js";
-import Category from "../models/category.js";
 
 const requestLogger = (request, response, next) => {
   info("Method:", request.method);
@@ -32,9 +31,16 @@ const userExtractor = async (request, response, next) => {
 
 const checkAdmin = async (request, response, next) => {
   const user = request.user;
-  if (!user.isAdmin) {
+  if (user === undefined || user.isAdmin === false) {
     return response.status(400).json({ error: "Bad request!" });
   }
+  next();
+};
+
+const setFileType = async (req, res, next) => {
+  let url = req.baseUrl || req.originalUrl;
+  const fileType = url.replace("/api/", "");
+  req.fileType = fileType;
   next();
 };
 
@@ -61,7 +67,6 @@ const errorHandler = (error, request, response, next) => {
   next(error);
 };
 
-
 export {
   unknownEndpoint,
   requestLogger,
@@ -69,4 +74,5 @@ export {
   tokenExtractor,
   userExtractor,
   checkAdmin,
+  setFileType,
 };

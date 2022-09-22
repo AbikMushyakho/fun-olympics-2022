@@ -141,7 +141,7 @@ const NewsTable = ({ setMessage }) => {
       responsive
       theme="solarized"
       onRowClicked={(row) => {
-        navigate(`/panel/news/${row.id}`);
+        navigate(`/news/${row.id}`);
       }}
     />
   );

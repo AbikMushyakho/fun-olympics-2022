@@ -1,11 +1,32 @@
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { BiCategory, BiLogOut, BiHome, BiNews } from "react-icons/bi";
 import { ImVideoCamera } from "react-icons/im";
 import { TbDeviceAnalytics } from "react-icons/tb";
 import { FaUsers } from "react-icons/fa";
+import { getOne } from "../../../services/users";
+import { toast } from "react-toastify";
 
 const Aside = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const fetchUser = async () => {
+      let loggedUser = window.localStorage.getItem("loggedInOlympicsUser");
+      if (loggedUser) {
+        const parsedUser = JSON.parse(loggedUser);
+        try {
+          const fetchedUser = await getOne(parsedUser.id);
+          if (fetchedUser === undefined || fetchedUser.isAdmin === false) {
+            navigate("/");
+          }
+        } catch (error) {
+          toast.error(error.message || error.response.data.error, 2000);
+        }
+      }
+    };
+    fetchUser();
+  });
+
   const glowText = `inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100`;
   const notGlow = `inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200`;
   const location = useLocation();
@@ -38,7 +59,7 @@ const Aside = () => {
             </li>
           </ul>
           <ul>
-          <li className="relative px-6 py-3">
+            <li className="relative px-6 py-3">
               <span
                 className={path === "/panel/users" ? glowAside : ""}
                 aria-hidden="true"
@@ -78,7 +99,7 @@ const Aside = () => {
                 <span className="ml-4">Videos</span>
               </Link>
             </li>
-            <li className="relative px-6 py-3">
+            {/* <li className="relative px-6 py-3">
               <span
                 className={path === "/panel/highlights" ? glowAside : ""}
                 aria-hidden="true"
@@ -91,7 +112,7 @@ const Aside = () => {
 
                 <span className="ml-4">Highlights</span>
               </Link>
-            </li>
+            </li> */}
 
             <li className="relative px-6 py-3">
               <span

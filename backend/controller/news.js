@@ -1,7 +1,7 @@
 import { Router } from "express";
 import News from "../models/news.js";
 import { newsExists } from "../utils/existsMiddleware.js";
-import { checkAdmin } from "../utils/middleware.js";
+import { checkAdmin, setFileType } from "../utils/middleware.js";
 import { uploadImage } from "../utils/multer.js";
 import { SECRET } from "../utils/config.js";
 
@@ -26,6 +26,7 @@ newsRouter.get("/:id", async (request, response) => {
 
 newsRouter.post(
   "/",
+  setFileType,
   checkAdmin,
   uploadImage,
   newsExists,
@@ -60,5 +61,22 @@ newsRouter.post(
           .end();
   }
 );
+
+newsRouter.patch("/:id", checkAdmin, async (request, response) => {
+  const findAndUpdate = await News.findByIdAndUpdate(
+    request.params.id,
+    request.body,
+    { runValidators: true }
+  );
+  const updatedData = await News.findById(request.params.id);
+  findAndUpdate
+    ? response.status(200).json(updatedData)
+    : response
+        .status(400)
+        .json({
+          error: "Failed to update",
+        })
+        .end();
+});
 
 export default newsRouter;

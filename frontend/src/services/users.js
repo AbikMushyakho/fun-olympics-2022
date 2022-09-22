@@ -1,10 +1,10 @@
 import axios from "axios";
-import { getToken } from "./token";
+import { getToken, getUser } from "./token";
 
-const token = getToken();
 const baseUrl = "/api/users";
+const token = getToken();
 const config = {
-  headers: { Authorization: `${token}` },
+  headers: { Authorization: token },
 };
 const getAll = async () => {
   const response = await axios.get(baseUrl, config);
@@ -18,5 +18,10 @@ const update = async (id, newData) => {
   const response = await axios.patch(`${baseUrl}/${id}`, newData, config);
   return response.data;
 };
-
-export { getAll, getOne, update };
+const addToFav = async (videoId) => {
+  const Vid = { videoId: videoId };
+  const user = getUser();
+  const response = await axios.patch(`${baseUrl}/fav/${user.id}`, Vid, config);
+  return response.data;
+};
+export { getAll, getOne, update, addToFav };

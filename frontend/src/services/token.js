@@ -8,8 +8,15 @@ const getToken = () => {
   const token = window.localStorage.getItem("token");
   return `${token}`;
 };
+const getUser = () => {
+  let user;
+  const u = window.localStorage.getItem("loggedInOlympicsUser");
+  user = JSON.parse(u);
+  return user;
+};
+
 const removeToken = () => {
   window.localStorage.removeItem("token");
 };
 
-export { setToken, getToken, removeToken };
+export { setToken, getToken, removeToken, getUser };

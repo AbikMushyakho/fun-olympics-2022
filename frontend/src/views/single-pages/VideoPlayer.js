@@ -7,14 +7,17 @@ import { getAll, getOne } from "../../services/video";
 import Moment from "react-moment";
 import Loading from "../../Components/Loading";
 import NotExists from "../../Components/NotExists";
+import { AiOutlineStar } from "react-icons/ai";
+import { BsFillStarFill } from "react-icons/bs";
+import { addToFav } from "../../services/users";
 const VideoPlayer = ({ user, setMessage }) => {
   const [video, setVideo] = useState({});
   const [played, setPlayed] = useState(0);
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
-  console.log(id);
   const [related, setRelated] = useState([]);
+  const [fav, setFav] = useState(false);
 
   useEffect(() => {
     let loggedUser = null;
@@ -35,7 +38,6 @@ const VideoPlayer = ({ user, setMessage }) => {
       const fetchVideo = async (id) => {
         try {
           const fetchedVideo = await getOne(id);
-          console.log(fetchedVideo);
           const allVideo = await getAll();
           setVideo(fetchedVideo);
           const filtered = allVideo.filter((v) => v.id !== id);
@@ -50,7 +52,7 @@ const VideoPlayer = ({ user, setMessage }) => {
       };
       fetchVideo(id);
     }
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     // title can be the fetched video title
@@ -66,6 +68,25 @@ const VideoPlayer = ({ user, setMessage }) => {
   const handleWatchTime = (state) => {
     console.log(state);
     setPlayed(state.playedSeconds);
+  };
+
+  const handleFavourites = async () => {
+    setFav(!fav);
+
+    try {
+      const added = await addToFav(id);
+      if (added) {
+        setMessage({
+          message: `Added to favourites`,
+          className: "success",
+        });
+      }
+    } catch (error) {
+      setMessage({
+        message: `${error.response.data.error}`,
+        className: "warning",
+      });
+    }
   };
 
   return (
@@ -84,16 +105,40 @@ const VideoPlayer = ({ user, setMessage }) => {
                 {video.title}
               </span>
 
-              <span>
-                {video.views} views * <Moment fromNow>{video.addedDate}</Moment>{" "}
-              </span>
+              <div className="p-2 flex flex-row justify-between">
+                <div>
+                  {video.views} views *{" "}
+                  <Moment fromNow>{video.addedDate}</Moment>
+                </div>
+                <div
+                  className="flex flex-row justify-end space-x-3 item-center cursor-pointer "
+                  onClick={handleFavourites}
+                >
+                  <div className="w-auto h-full">
+                    {fav ? (
+                      <BsFillStarFill className="w-6 h-6" />
+                    ) : (
+                      <AiOutlineStar className="w-7 h-7" />
+                    )}
+                  </div>{" "}
+                  <div>
+                    {fav ? (
+                      <span className="p-2">Added to favourites</span>
+                    ) : (
+                      <span className="p-2">Add to favourites</span>
+                    )}
+                  </div>
+                </div>
+              </div>
 
               <hr />
 
-              <p>
-                {video.uploader.username}
-                {video.description}
-              </p>
+              <div className="p-5 flex flex-col">
+               <span> Uploaded by {video.uploader.username}</span>
+               <span className="text-wheatt text-lg mt-5">
+               Description</span>
+                <span>  {video.description}</span>
+              </div>
               <span>Played:{played} </span>
             </div>
           </>
@@ -114,7 +159,7 @@ const VideoPlayer = ({ user, setMessage }) => {
                   key={index}
                   details={{
                     title: video.title,
-                    linkUrl: `/categories/${video.category}/${video.id}`,
+                    linkUrl: `/categories/${video.category.id}/${video.id}`,
                     videoUrl: video.video_url,
                     views: video.views,
                     addedDate: video.addedDate,

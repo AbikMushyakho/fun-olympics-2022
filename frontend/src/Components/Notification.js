@@ -1,16 +1,29 @@
 import React from "react";
+// import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Notification = ({ notify }) => {
+  // const navigate = useNavigate()
   const { className, message } = notify;
 
   if (message === "undefined") {
     toast.error("Internal server error 500", {
       autoClose: 2000,
     });
-  } else if (message === "token expired") {
+  } 
+  else if(message === "Bad request!"){
+    window.location.href='/login'
     window.localStorage.clear();
+
+    toast.error(message, {
+      autoClose: 2000,
+    });
+  }
+  
+  else if (message === "token expired") {
+    window.localStorage.clear();
+    window.location.href='/login'
     toast.warning(message, {
       autoClose: 2000,
     });

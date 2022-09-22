@@ -26,7 +26,7 @@ const SingleCategory = ({ setMessage }) => {
     };
 
     fetchData(id);
-  }, []);
+  }, [id]);
 
   return (
     <>

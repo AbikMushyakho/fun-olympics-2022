@@ -1,13 +1,12 @@
 import axios from "axios";
+import { getToken } from "./token";
 
 const baseUrl = "/api/category";
 
-let token = null;
-
-const setToken = (newToken) => {
-  token = `bearer ${newToken}`;
+const token = getToken();
+const config = {
+  headers: { Authorization: token },
 };
-
 const getAllCategories = async () => {
   const response = await axios.get(baseUrl);
   return response.data;
@@ -17,18 +16,17 @@ const getOne = async (id) => {
   return response.data;
 };
 const create = async (newObject) => {
-  const config = {
-    headers: { Authorization: token },
+  const configs = {
+    headers: {
+      "Content-Type": 'application/json',
+      "Authorization": `${token}` },
   };
-  const response = await axios.post(baseUrl, newObject, config);
+  const response = await axios.post(baseUrl, newObject, configs);
   return response.data;
 };
 
 const update = async (id, newObject) => {
-  const config = {
-    headers: { Authorization: token },
-  };
   const response = await axios.patch(`${baseUrl}/${id}`, newObject, config);
   return response.data;
 };
-export { setToken, create, getAllCategories, getOne, update };
+export { create, getAllCategories, getOne, update };

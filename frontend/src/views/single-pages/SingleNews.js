@@ -27,7 +27,7 @@ const SingleNews = ({ setMessage }) => {
       }
     };
     fetchData(id);
-  }, []);
+  }, [id]);
 
   return (
     <div>

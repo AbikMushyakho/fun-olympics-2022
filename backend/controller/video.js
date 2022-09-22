@@ -1,7 +1,7 @@
 import { Router } from "express";
 import jwt from "jsonwebtoken";
 import Video from "../models/video.js";
-import { checkAdmin } from "../utils/middleware.js";
+import { checkAdmin, setFileType } from "../utils/middleware.js";
 import { uploadVideo } from "../utils/multer.js";
 import { SECRET } from "../utils/config.js";
 import { videoExists } from "../utils/existsMiddleware.js";
@@ -31,6 +31,7 @@ videoRouter.get("/:id", async (request, response) => {
 
 videoRouter.post(
   "/",
+  setFileType,
   checkAdmin,
   uploadVideo,
   videoExists,
