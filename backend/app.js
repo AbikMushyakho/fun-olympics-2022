@@ -36,11 +36,20 @@ mongoose
 app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
+app.use(express.static("build"));
+
 // app.use(express.static(path.join(__dirname, "public")));
 // info(path.join(__dirname, "public"));
 app.use(requestLogger);
 app.use(tokenExtractor);
 app.use(userExtractor);
+
+// info(path.join(__dirname, 'build', 'index.js'));
+
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'))
+})
 
 app.use("/api/users", userRouter);
 app.use("/api/login", loginRouter);

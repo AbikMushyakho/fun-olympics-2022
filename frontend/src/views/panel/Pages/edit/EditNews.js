@@ -13,7 +13,6 @@ const EditNews = ({ setMessage }) => {
   const fetchNews = async (id) => {
     try {
       const fectchedNews = await getOne(id);
-      console.log(fectchedNews);
       setNews(fectchedNews);
     } catch (error) {
       setMessage({
@@ -42,7 +41,7 @@ const EditNews = ({ setMessage }) => {
             try {
               const response = await update(id, data);
               if (response) {
-                setMessage({ message: "Category updated..", className: "success" });
+                setMessage({ message: "News updated..", className: "success" });
                 navigate(-1);
               }
             } catch (error) {

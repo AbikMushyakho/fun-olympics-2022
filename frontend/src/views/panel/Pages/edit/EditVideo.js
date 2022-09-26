@@ -14,7 +14,6 @@ const EditVideo = ({ setMessage }) => {
   const fetchVideo = async (id) => {
     try {
       const fetchedVideos = await getOne(id);
-      console.log(fetchedVideos);
       setVideo(fetchedVideos);
     } catch (error) {
       setMessage({

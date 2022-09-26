@@ -112,8 +112,8 @@ const Navbar = ({ user, setUser, setMessage, handleSearchKey }) => {
                       type="button"
                       onClick={(e) => {
                         e.preventDefault();
-                        window.localStorage.clear();
                         setUser(null);
+                        window.localStorage.clear();
                         setMessage({
                           message: "Logout successfully",
                           className: "success",

@@ -30,7 +30,7 @@ const AddNews = ({ setMessage }) => {
               const response = await create(newdata);
               if (response) {
                 setMessage({
-                  message: "News created..",
+                  message: "News added..",
                   className: "success",
                 });
                 navigate(-1);

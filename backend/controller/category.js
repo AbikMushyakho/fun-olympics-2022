@@ -3,8 +3,11 @@ import Category from "../models/category.js";
 import { SECRET } from "../utils/config.js";
 import jwt from "jsonwebtoken";
 import { uploadImage } from "../utils/multer.js";
-import { checkAdmin,setFileType } from "../utils/middleware.js";
+import { checkAdmin, setFileType } from "../utils/middleware.js";
 import { categoryExists } from "../utils/existsMiddleware.js";
+import path from "path";
+import fs from "fs";
+import Video from "../models/video.js";
 const categoryRouter = Router();
 
 categoryRouter.get("/", async (request, response) => {
@@ -23,7 +26,7 @@ categoryRouter.post(
     const token = request.token;
     const user = request.user;
     let imagePath;
-    if(request.file ===undefined){
+    if (request.file === undefined) {
       return response.status(401).json({ error: "File is missing!" }).end();
     }
     const { path } = request.file;
@@ -104,6 +107,41 @@ categoryRouter.patch("/:id", checkAdmin, async (request, response) => {
           error: "Failed to update",
         })
         .end();
+});
+
+categoryRouter.delete("/:id", checkAdmin, async (request, response) => {
+  const token = request.token;
+  const user = request.user;
+  const decodeToken = jwt.verify(token, SECRET);
+  if (!(token && user && decodeToken.id)) {
+    return response.status(401).json({ error: "token is missing or invalid" });
+  }
+  const exists = await Category.findById(request.params.id);
+  if (!exists) {
+    return response.status(400).json({ error: "Category doesnot exists" });
+  }
+  // Delete videos
+  const videos = exists.videos;
+  if (videos.length > 0) {
+    videos.map(async (video) => {
+      const found = await Video.findById(video);
+      const deletePath = path.join("public", found.video_url);
+      fs.rmSync(deletePath);
+      const result = await Video.deleteOne({ _id: video });
+      if (result.deletedCount === 1) {
+        console.log(`${found.id} video deleted`);
+      }
+    });
+  }
+
+  const deletePath = path.join("public", exists.image);
+  fs.rmSync(deletePath);
+  const result = await Category.deleteOne({ _id: request.params.id });
+  if (result.deletedCount === 1) {
+    response.status(204).end();
+  } else {
+    return response.status(400).json({ error: "Failed to delete" });
+  }
 });
 
 export default categoryRouter;

@@ -3,7 +3,7 @@ import DataTable, { createTheme } from "react-data-table-component";
 import { FaEdit } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
-import { getAll } from "../../../services/video";
+import { deleteVideo, getAll } from "../../../services/video";
 import ReactPlayer from "react-player";
 
 const VideoTable = ({ setMessage }) => {
@@ -15,7 +15,6 @@ const VideoTable = ({ setMessage }) => {
   const fetchVideo = async () => {
     try {
       const fetchedVideos = await getAll();
-      console.log(fetchedVideos);
       setVideos(fetchedVideos);
       setFiltered(fetchedVideos);
     } catch (error) {
@@ -117,7 +116,20 @@ const VideoTable = ({ setMessage }) => {
           >
             <FaEdit className="w-6 h-6 fill-blue-800 hover:fill-blue-600" />
           </button>
-          <button>
+          <button
+            onClick={() => {
+              if (
+                window.confirm(
+                  `Are you sure you want to delete ${row.title.substr(
+                    0,
+                    10
+                  )}...?`
+                )
+              ) {
+                handleDelete(row.id);
+              }
+            }}
+          >
             <MdDeleteOutline className="w-7 h-7 fill-red-800 hover:fill-red-600" />
           </button>
         </div>
@@ -128,6 +140,23 @@ const VideoTable = ({ setMessage }) => {
     //   selector:(row)=><img width={50} height={50} src={row.img} alt=""/>
     // }
   ];
+  const handleDelete = async (id) => {
+    try {
+      await deleteVideo(id);
+      const updatedVideos = videos.filter((video) => video.id !== id);
+      setVideos(updatedVideos);
+      setFiltered(updatedVideos);
+      setMessage({
+        message: "Video deleted successfully.",
+        className: "success",
+      });
+    } catch (error) {
+      setMessage({
+        message: `${error.response.data.error}`,
+        className: "error",
+      });
+    }
+  };
   return (
     <DataTable
       title="Video List"
@@ -140,7 +169,10 @@ const VideoTable = ({ setMessage }) => {
       selectableRowsHighlight
       highlightOnHover
       actions={
-        <button   onClick={()=>navigate('/panel/videos/add')} className=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-thin lg:font-medium rounded-lg truncate text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+        <button
+          onClick={() => navigate("/panel/videos/add")}
+          className=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-thin lg:font-medium rounded-lg truncate text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        >
           Add
         </button>
       }

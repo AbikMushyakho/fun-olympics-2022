@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Aside from "../../Components/Aside";
 import { MdDeleteOutline, MdOutlineVideoSettings } from "react-icons/md";
-import { BiNews } from "react-icons/bi";
-import { TbDeviceWatchStats } from "react-icons/tb";
-import { FaEdit, FaStar, FaUsers } from "react-icons/fa";
+// import { BiNews } from "react-icons/bi";
+// import { TbDeviceWatchStats } from "react-icons/tb";
+import { FaEdit, FaStar } from "react-icons/fa";
+import { IoLogInSharp } from "react-icons/io5";
 import { getOne } from "../../../../services/users";
 
 const ViewUser = ({ setMessage }) => {
@@ -54,6 +55,11 @@ const ViewUser = ({ setMessage }) => {
               <div className="flex flex-row justify-center w-full mx-auto">
                 <span className=" text-gray-600 text-sm">{user.email}</span>
               </div>
+              <div className="flex flex-row justify-center w-full mx-auto">
+                <span className=" text-gray-600 text-sm">
+                  {user ? (user.verified ? "verified" : "not verified") : ""}
+                </span>
+              </div>
               <div className="flex flex-row space-x-3 pt-5 justify-center w-full mx-auto">
                 <button
                   onClick={() => navigate(`/panel/users/edit/${id}`)}
@@ -62,11 +68,11 @@ const ViewUser = ({ setMessage }) => {
                   <FaEdit className="w-5 h-5" />
                   <span> Edit</span>
                 </button>
-                <button className="text-white flex content-center bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-thin lg:font-medium rounded-lg truncate text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
+                {/* <button className="text-white flex content-center bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-thin lg:font-medium rounded-lg truncate text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
                   <MdDeleteOutline className="w-5 h-5" />
 
                   <span>Delete</span>
-                </button>
+                </button> */}
               </div>
             </div>
 
@@ -80,7 +86,7 @@ const ViewUser = ({ setMessage }) => {
                     Favourites
                   </p>
                   <p className="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                   {user.favourites?user.favourites.length:0}
+                    {user.favourites ? user.favourites.length : 0}
                   </p>
                 </div>
               </div>
@@ -94,26 +100,26 @@ const ViewUser = ({ setMessage }) => {
                     Video watched
                   </p>
                   <p className="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                    25
+                    {user.video_watched ? user.video_watched : 0}
                   </p>
                 </div>
               </div>
 
               <div className="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
                 <div className="p-3 mr-4 text-blue-500 bg-blue-100 rounded-full dark:text-blue-100 dark:bg-blue-500">
-                  <BiNews className="w-5 h-5" />
+                  <IoLogInSharp className="w-5 h-5" />
                 </div>
                 <div>
                   <p className="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
-                  News read
+                    Logged in
                   </p>
                   <p className="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                    376
+                    {user.logged_in ? user.logged_in : 0}
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+              {/* <div className="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
                 <div className="p-3 mr-4 text-teal-500 bg-teal-100 rounded-full dark:text-teal-100 dark:bg-teal-500">
                   <TbDeviceWatchStats className="w-5 h-5" />
                 </div>
@@ -125,7 +131,7 @@ const ViewUser = ({ setMessage }) => {
                     01:10 h
                   </p>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

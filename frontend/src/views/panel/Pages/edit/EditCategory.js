@@ -13,7 +13,6 @@ const EditCategory = ({ setMessage }) => {
   const fetchCategory = async (id) => {
     try {
       const fetchedCategory = await getOne(id);
-      console.log(fetchedCategory);
       setCategory(fetchedCategory);
     } catch (error) {
       setMessage({

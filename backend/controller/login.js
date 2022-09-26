@@ -23,12 +23,14 @@ loginRouter.post("/", async (request, response) => {
   };
   const token = jwt.sign(userForToken, SECRET, { expiresIn: 60 * 60 });
 
+  user.logged_in = user.logged_in + 1;
+  await user.save();
   response.status(200).json({
     token: token,
     username: user.username,
     email: user.email,
     isAdmin: user.isAdmin,
-    id:user._id
+    id: user._id,
   });
 });
 

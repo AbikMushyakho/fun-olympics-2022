@@ -56,17 +56,16 @@ const VideoPlayer = ({ user, setMessage }) => {
 
   useEffect(() => {
     // title can be the fetched video title
-    document.title = "Video player";
     return () => {
       // save user's watch time
 
-      console.log(played);
-      console.log("Component unmount");
+      // console.log(played);
+      // console.log("Component unmount");
     };
   }, [played]);
 
   const handleWatchTime = (state) => {
-    console.log(state);
+    // console.log(state);
     setPlayed(state.playedSeconds);
   };
 

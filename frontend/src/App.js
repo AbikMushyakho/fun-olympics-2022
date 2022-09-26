@@ -85,7 +85,7 @@ function App() {
                 <Search searchText={searchText} setMessage={setMessage} />
               }
             />
-            <Route path="profile" element={<Profile />} />
+            <Route path="profile" element={<Profile user={user}/>} />
             <Route path="favourites" element={<Favourites/>}/>
             <Route path="news">
               <Route index element={<News setMessage={setMessage} />} />

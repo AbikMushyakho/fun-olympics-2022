@@ -100,9 +100,9 @@ const UsersTable = ({ setMessage }) => {
           >
             <FaEdit className="w-6 h-6 fill-blue-800 hover:fill-blue-600" />
           </button>
-          <button>
+          {/* <button>
             <MdDeleteOutline className="w-7 h-7 fill-red-800 hover:fill-red-600" />
-          </button>
+          </button> */}
         </div>
       ),
     },

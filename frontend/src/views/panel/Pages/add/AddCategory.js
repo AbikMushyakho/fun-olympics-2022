@@ -34,13 +34,12 @@ const AddCategory = ({ setMessage }) => {
               const response = await create(newdata);
               if (response) {
                 setMessage({
-                  message: "Category created..",
+                  message: "Category added..",
                   className: "success",
                 });
                 navigate(-1);
               }
             } catch (error) {
-              console.log(error)
               let message 
               if(error.response){
                 message = error.response.data.error

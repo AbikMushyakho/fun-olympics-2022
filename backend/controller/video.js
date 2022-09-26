@@ -6,6 +6,8 @@ import { uploadVideo } from "../utils/multer.js";
 import { SECRET } from "../utils/config.js";
 import { videoExists } from "../utils/existsMiddleware.js";
 import Category from "../models/category.js";
+import path from "path";
+import fs from "fs";
 
 const videoRouter = Router();
 
@@ -18,6 +20,14 @@ videoRouter.get("/", async (request, response) => {
 });
 
 videoRouter.get("/:id", async (request, response) => {
+  const token = request.token;
+  const user = request.user;
+  const decodeToken = jwt.verify(token, SECRET);
+  if (!(user && token && decodeToken.id)) {
+    return response.status(401).json({ error: "Token missing or invalid!" });
+  }
+  user.video_watched = user.video_watched + 1;
+  await user.save();
   const found = await Video.findById(request.params.id)
     .populate("uploader", { username: 1, email: 1 })
     .populate("category", { title: 1 });
@@ -95,5 +105,33 @@ videoRouter.patch("/:id", checkAdmin, async (request, response) => {
 });
 
 // add video in a category through video controller
+
+videoRouter.delete("/:id", checkAdmin, async (request, response) => {
+  const token = request.token;
+  const user = request.user;
+  const decodeToken = jwt.verify(token, SECRET);
+  if (!(token && user && decodeToken.id)) {
+    return response.status(401).json({ error: "token is missing or invalid" });
+  }
+  const exists = await Video.findById(request.params.id);
+  if (!exists) {
+    return response.status(400).json({ error: "Video doesnot exists" });
+  }
+  const foundCategory = await Category.findById(exists.category);
+  const catVideos = foundCategory.videos;
+
+  const filtered = catVideos.filter((video) => video.toString() !== request.params.id.toString());
+  foundCategory.videos = filtered;
+  await foundCategory.save();
+
+  const deletePath = path.join("public", exists.video_url);
+  fs.rmSync(deletePath);
+  const result = await Video.deleteOne({ _id: request.params.id });
+  if (result.deletedCount === 1) {
+    response.status(204).end();
+  } else {
+    return response.status(400).json({ error: "Failed to delete" });
+  }
+});
 
 export default videoRouter;

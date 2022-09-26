@@ -6,7 +6,7 @@ const setToken = (newToken) => {
 };
 const getToken = () => {
   const token = window.localStorage.getItem("token");
-  return `${token}`;
+  return token;
 };
 const getUser = () => {
   let user;

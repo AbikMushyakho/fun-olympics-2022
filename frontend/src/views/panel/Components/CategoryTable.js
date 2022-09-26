@@ -3,7 +3,7 @@ import DataTable, { createTheme } from "react-data-table-component";
 import { FaEdit } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
-import { getAllCategories } from "../../../services/category";
+import { deleteCategory, getAllCategories } from "../../../services/category";
 
 const CategoryTable = ({ setMessage }) => {
   const [search, setSearch] = useState("");
@@ -92,7 +92,17 @@ const CategoryTable = ({ setMessage }) => {
           >
             <FaEdit className="w-6 h-6 fill-blue-800 hover:fill-blue-600" />
           </button>
-          <button>
+          <button
+            onClick={() => {
+              if (
+                window.confirm(
+                  "All of the videos in this category will automatically be deleted! Would you really want to delete this category?"
+                )
+              ) {
+                handleDelete(row.id);
+              }
+            }}
+          >
             <MdDeleteOutline className="w-7 h-7 fill-red-800 hover:fill-red-600" />
           </button>
         </div>
@@ -103,6 +113,23 @@ const CategoryTable = ({ setMessage }) => {
     //   selector:(row)=><img width={50} height={50} src={row.img} alt=""/>
     // }
   ];
+  const handleDelete = async (id) => {
+    try {
+      await deleteCategory(id);
+      const updatedVideos = categories.filter((category) => category.id !== id);
+      setCategories(updatedVideos);
+      setFiltered(updatedVideos);
+      setMessage({
+        message: "Category and videos deleted successfully.",
+        className: "success",
+      });
+    } catch (error) {
+      setMessage({
+        message: `${error.response.data.error}`,
+        className: "error",
+      });
+    }
+  };
   return (
     <DataTable
       title="Category List"
@@ -115,7 +142,10 @@ const CategoryTable = ({ setMessage }) => {
       selectableRowsHighlight
       highlightOnHover
       actions={
-        <button onClick={()=>navigate('/panel/categories/add')} className=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-thin lg:font-medium rounded-lg truncate text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+        <button
+          onClick={() => navigate("/panel/categories/add")}
+          className=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-thin lg:font-medium rounded-lg truncate text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        >
           Add
         </button>
       }

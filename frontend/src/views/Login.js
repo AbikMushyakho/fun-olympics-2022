@@ -19,9 +19,9 @@ const Login = ({ setUser, setMessage }) => {
               const response = await login(data);
               if (response) {
                 resetForm({});
-                setToken(response.token);
                 const user = JSON.stringify(response);
                 window.localStorage.setItem("loggedInOlympicsUser", user);
+                setToken(response.token);
                 setMessage({ message: 'Login successfully', className: 'success' })
                 setUser(response);
                   navigate("/live");
@@ -89,12 +89,12 @@ const Login = ({ setUser, setMessage }) => {
                       Remember me
                     </label>
                   </div>
-                  <Link
+                  {/* <Link
                     to="/forgetPw"
                     className="ml-auto text-sm text-blue-700 hover:underline dark:text-blue-500"
                   >
                     Forget Password?
-                  </Link>
+                  </Link> */}
                 </div>
                 <button
                   type="submit"

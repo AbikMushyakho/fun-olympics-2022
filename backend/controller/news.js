@@ -4,8 +4,9 @@ import { newsExists } from "../utils/existsMiddleware.js";
 import { checkAdmin, setFileType } from "../utils/middleware.js";
 import { uploadImage } from "../utils/multer.js";
 import { SECRET } from "../utils/config.js";
-
+import fs from "fs";
 import jwt from "jsonwebtoken";
+import path from "path";
 
 const newsRouter = Router();
 
@@ -77,6 +78,27 @@ newsRouter.patch("/:id", checkAdmin, async (request, response) => {
           error: "Failed to update",
         })
         .end();
+});
+
+newsRouter.delete("/:id", checkAdmin, async (request, response) => {
+  const token = request.token;
+  const user = request.user;
+  const decodeToken = jwt.verify(token, SECRET);
+  if (!(token && user && decodeToken.id)) {
+    return response.status(401).json({ error: "token is missing or invalid" });
+  }
+  const exists = await News.findById(request.params.id);
+  if (!exists) {
+    return response.status(400).json({ error: "News doesnot exists" });
+  }
+  const deletePath = path.join("public", exists.image)
+  fs.rmSync(deletePath);
+  const result = await News.deleteOne({ _id: request.params.id });
+  if (result.deletedCount === 1) {
+    response.status(204).end();
+  } else {
+    return response.status(400).json({ error: "Failed to delete" });
+  }
 });
 
 export default newsRouter;

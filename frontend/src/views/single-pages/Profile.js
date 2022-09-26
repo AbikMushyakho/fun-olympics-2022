@@ -1,6 +1,6 @@
 import React from "react";
 
-const Profile = () => {
+const Profile = ({user}) => {
   return (
     <>
       <div className="h-full bg-gray-50 dark:bg-gray-900 py-10">
@@ -21,7 +21,7 @@ const Profile = () => {
               <img
                 id="showImage"
                 className="max-w-xs w-32 items-center border"
-                src="https://images.unsplash.com/photo-1477118476589-bff2c5c4cfbb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=200&q=200"
+                src="/assets/profile-img/profile-1.png"
                 alt=""
               />
             </div>
@@ -42,7 +42,7 @@ const Profile = () => {
                     id="username"
                     className="border-1  rounded-xl px-4 py-2 w-full  dark:bg-gray-800 dark:border-gray-700 "
                     type="text"
-                    value="Jane Name"
+                    value={user?user.username:""}
                   />
                 </div>
               </div>
@@ -58,7 +58,7 @@ const Profile = () => {
                   id="email"
                   className="border-1  rounded-xl px-4 py-2 w-full dark:bg-gray-800 dark:border-gray-700"
                   type="email"
-                  value="example@example.com"
+                  value={user?user.email:""}
                 />
                 <span className="text-gray-600 pt-4 block opacity-70 dark:text-gray-300">
                   Personal login information of your account
