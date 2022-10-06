@@ -33,6 +33,7 @@ import EditNews from "./views/panel/Pages/edit/EditNews";
 import AddVideo from "./views/panel/Pages/add/AddVideo";
 import EditVideo from "./views/panel/Pages/edit/EditVideo";
 import Favourites from "./views/single-pages/Favourites";
+import About from "./views/About";
 function App() {
   const [user, setUser] = useState(null);
   const [searchText, setSearchText] = useState({ query: "" });
@@ -167,6 +168,8 @@ function App() {
                 element={<Analytics setMessage={setMessage} />}
               />
             </Route>
+            <Route path="about" element={<About />} />
+
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </div>

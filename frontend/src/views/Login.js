@@ -18,13 +18,13 @@ const Login = ({ setUser, setMessage }) => {
             try {
               const response = await login(data);
               if (response) {
+                setUser(response);
                 resetForm({});
                 const user = JSON.stringify(response);
                 window.localStorage.setItem("loggedInOlympicsUser", user);
                 setToken(response.token);
+                navigate("/live");
                 setMessage({ message: 'Login successfully', className: 'success' })
-                setUser(response);
-                  navigate("/live");
               }
             } catch (error) {
               setMessage({

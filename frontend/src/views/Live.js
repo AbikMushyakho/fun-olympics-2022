@@ -13,10 +13,7 @@ const Live = ({ user, setMessage }) => {
     let loggedUser = null;
     if (user !== null) {
       loggedUser = user;
-    } else {
-      const localUser = window.localStorage.getItem("loggedInOlympicsUser");
-      loggedUser = JSON.parse(localUser);
-    }
+    } 
 
     if (loggedUser === null) {
       navigate("/login");

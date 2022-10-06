@@ -37,7 +37,7 @@ const SingleNews = ({ setMessage }) => {
         <div className="flex flex-col w-full space-y-4 text-center">
           {/* Title */}
           <div className="mb-2 w-full flex justify-center">
-            <span className="text-wheatt font-bold text-xl md:text-2xl lg:text-3xl">
+            <span className="text-wheatt font-bold text-justify text-xl md:text-2xl lg:text-3xl">
               {news.title}
             </span>
           </div>
@@ -49,7 +49,7 @@ const SingleNews = ({ setMessage }) => {
             alt=" description"
           />
           {/* Description */}
-          <p className="md:text-xl">
+          <p className="md:text-xl text-justify">
             {news.description}
             <br />
             {/* Upload date */}
