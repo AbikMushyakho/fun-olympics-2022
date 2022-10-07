@@ -131,15 +131,25 @@ userRouter.patch("/fav/:id",async(request,response)=>{
   // const body = request.body;
   const videoId = request.body.videoId.toString()
   const prevFav = [...user.favourites]
-  const exists =   prevFav.filter((fav)=> String(fav)===String(videoId))
-  if(exists.length >0){
-    return response.status(401).json({ error: "Video has been already added to favourites!" });
+  const exists = prevFav.some((fav) => String(fav) === String(videoId));
+  if (exists) {
+    const removedList = prevFav.filter(
+      (fav) => String(fav) !== String(videoId)
+    );
+    user.favourites = removedList;
+    await user.save();
+    response
+      .status(200)
+      .json({ message: "Removed from favourite list", data: removedList });
+  } else {
+    let favourites = [...prevFav, videoId];
+    console.log(favourites);
+    user.favourites = favourites;
+    await user.save();
+    response
+      .status(200)
+      .json({ message: "Added to favourite list", data: favourites });
   }
- let favourites= [...prevFav,videoId]
-
-  console.log(favourites)
-  user.favourites = favourites
-  await user.save(); 
 
 
 })

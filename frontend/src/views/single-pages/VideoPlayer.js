@@ -9,7 +9,7 @@ import Loading from "../../Components/Loading";
 import NotExists from "../../Components/NotExists";
 import { AiOutlineStar } from "react-icons/ai";
 import { BsFillStarFill } from "react-icons/bs";
-import { addToFav } from "../../services/users";
+import { addToFav, getOne as getOneUser } from "../../services/users";
 const VideoPlayer = ({ user, setMessage }) => {
   const [video, setVideo] = useState({});
   const [played, setPlayed] = useState(0);
@@ -37,6 +37,16 @@ const VideoPlayer = ({ user, setMessage }) => {
     } else {
       const fetchVideo = async (id) => {
         try {
+          const getUser = await getOneUser(loggedUser.id);
+          if (getUser) {
+            const userFav = getUser.favourites;
+            const exists = userFav.some(
+              (fav) => fav.id.toString() === id.toString()
+            );
+            if (exists) {
+              setFav(true);
+            }
+          }
           const fetchedVideo = await getOne(id);
           const allVideo = await getAll();
           setVideo(fetchedVideo);
@@ -54,15 +64,15 @@ const VideoPlayer = ({ user, setMessage }) => {
     }
   }, [id]);
 
-  useEffect(() => {
-    // title can be the fetched video title
-    return () => {
-      // save user's watch time
+  // useEffect(() => {
+  //   // title can be the fetched video title
+  //   return () => {
+  //     // save user's watch time
 
-      // console.log(played);
-      // console.log("Component unmount");
-    };
-  }, [played]);
+  //     // console.log(played);
+  //     // console.log("Component unmount");
+  //   };
+  // }, [played]);
 
   const handleWatchTime = (state) => {
     // console.log(state);
@@ -73,10 +83,10 @@ const VideoPlayer = ({ user, setMessage }) => {
     setFav(!fav);
 
     try {
-      const added = await addToFav(id);
-      if (added) {
+      const response = await addToFav(id);
+      if (response) {
         setMessage({
-          message: `Added to favourites`,
+          message: response.message,
           className: "success",
         });
       }
@@ -133,10 +143,9 @@ const VideoPlayer = ({ user, setMessage }) => {
               <hr />
 
               <div className="p-5 flex flex-col">
-               <span> Uploaded by {video.uploader.username}</span>
-               <span className="text-wheatt text-lg mt-5">
-               Description</span>
-                <span>  {video.description}</span>
+                <span> Uploaded by {video.uploader.username}</span>
+                <span className="text-wheatt text-lg mt-5">Description</span>
+                <span> {video.description}</span>
               </div>
               <span>Played:{played} </span>
             </div>
