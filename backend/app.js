@@ -23,6 +23,7 @@ import loginRouter from "./controller/login.js";
 import categoryRouter from "./controller/category.js";
 import newsRouter from "./controller/news.js";
 import videoRouter from "./controller/video.js";
+import changePasswordRouter from "./controller/forget_pw.js"
 
 mongoose
   .connect(MONGODB_URI)
@@ -56,6 +57,7 @@ app.use("/api/login", loginRouter);
 app.use("/api/category", categoryRouter);
 app.use("/api/news", newsRouter);
 app.use("/api/video", videoRouter);
+app.use("/api/change",changePasswordRouter)
 
 app.use(unknownEndpoint);
 app.use(errorHandler);

@@ -1,77 +1,93 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { verify } from "../services/loginSignup";
-import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-const Verify = () => {
+const Verify = ({ setMessage }) => {
   const [code, setCode] = useState("");
+  const [email, setEmail] = useState("");
   const navigate = useNavigate();
+  useEffect(() => {
+    const email = window.localStorage.getItem("signupEmail");
+
+    if (!email) {
+      navigate("/signup");
+      setMessage({
+        message: `Please signup to get otp!`,
+        className: "warning",
+      });
+    } else {
+      const em = JSON.parse(email);
+      setEmail(em);
+    }
+  }, []);
+
   const verifyOTP = async (e) => {
     e.preventDefault();
-
-    const email = window.localStorage.getItem("signupEmail");
-    const data = {
-      email: JSON.parse(email),
-      code: parseInt(code),
-    };
-    try {
-      const response = await verify(data);
-      if (response) {
-        toast.success(`Email verified..`, {
-          autoClose:2000
+    if (code === "") {
+      setMessage({
+        message: "Please enter the OPT code!",
+        className: "warning",
+      });
+    } else {
+      const data = {
+        email: email,
+        code: parseInt(code),
+      };
+      try {
+        const response = await verify(data);
+        if (response) {
+          window.localStorage.removeItem("signupEmail");
+          navigate("/login");
+          setMessage({
+            message: "Email verified..",
+            className: "success",
+          });
+        }
+      } catch (error) {
+        setMessage({
+          message: `${error.response.data.error}`,
+          className: "error",
         });
-        window.localStorage.removeItem("signupEmail");
-          setInterval(() => {
-            navigate("/login");
-          }, 2000);
-       
       }
-    } catch (error) {
-      toast.error(error.response.data.error);
     }
   };
 
   return (
     <>
-      <div className="w-full flex justify-center py-8 ">
-        <div className="container mx-auto p-5">
-          <div className="max-w-sm mx-auto md:max-w-lg">
-            <div className="w-full">
-              <ToastContainer />
-              <div className="bg-white dark:bg-blackk min-h-80 py-7 rounded-lg text-center">
-                <h1 className="text-2xl font-bold">OTP Verification</h1>
-                <div className="flex flex-col mt-4">
-                  <span>Enter the OTP you received at</span>
-                  <span className="font-semibold">your gmail</span>
-                </div>
+      <div className="w-full flex justify-center py-8">
+        <div className="p-4 w-full max-w-sm bg-white rounded-lg border border-gray-200 shadow-md sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
+          <div className="bg-white dark:bg-gray-800 dark:border-gray-700 min-h-80 rounded-lg text-center">
+            <h1 className="text-xl font-medium text-gray-900 dark:text-white mb-4">
+              OTP Verification
+            </h1>
 
-                <div className=" w-full items-center px-5 flex flex-col h-auto dark:text-blackk">
-                  <input
-                    className=" my-4 bg-gray-50 border w-full py-3 font-bold text-lg border-gray-300 text-gray-900  rounded-lg focus:ring-blue-500 focus:border-blue-500 block  dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                    type="tel"
-                    maxLength="6"
-                    placeholder="Enter otp code"
-                    onChange={(e) => {
-                      e.preventDefault();
-                      setCode(e.target.value);
-                    }}
-                  />
-                  <button
-                    onClick={verifyOTP}
-                    className="btn-primary mx-auto block bg-gray-500 px-4 py-2.5 rounded-lg text-white hover:bg-gray-700"
-                  >
-                    Verify Otp
-                  </button>
-                </div>
-
-                <div className="flex justify-center text-center mt-5">
-                  {/* <a className="flex items-center text-blue-700 hover:text-blue-900 cursor-pointer">
-                    <span className="font-bold">Resend OTP</span>
-                    <i className="bx bx-caret-right ml-1"></i>
-                  </a> */}
-                </div>
+            <div className=" w-full items-center flex flex-col h-auto dark:text-blackk">
+              <div className="flex flex-row justify-start w-full">
+                <label
+                  htmlFor="email"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  Enter otp
+                </label>
               </div>
+              <input
+                className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                type="tel"
+                maxLength="6"
+                placeholder="Enter otp code"
+                onChange={(e) => {
+                  e.preventDefault();
+                  setCode(e.target.value);
+                }}
+              />
+              <button
+                onClick={verifyOTP}
+                className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                Verify Otp
+              </button>
             </div>
+            <div className="flex justify-center text-center mt-5"></div>
           </div>
         </div>
       </div>

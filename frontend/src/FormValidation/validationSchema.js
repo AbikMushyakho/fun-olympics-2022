@@ -28,6 +28,21 @@ const loginValidationSchema = object({
     .max(30)
     .required("Password is required!"),
 });
+const changePasswordValidationSchema = object({
+  email: string()
+    .email("Your email must be valid email!")
+    .required("Email is required!"),
+  password: string()
+    .matches(
+      /^.*(?=.{7,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
+      "Must Contain 7 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
+    )
+    .max(30)
+    .required("Password is required!"),
+  confirmPassword: string()
+    .required("Please retype your new password.")
+    .oneOf([ref("password")], "Your passwords do not match!"),
+});
 const updateValidationSchema = (cpDisabled) => {
   let obj = null;
   cpDisabled
@@ -65,5 +80,6 @@ const updateValidationSchema = (cpDisabled) => {
 export {
   signupValidationSchema,
   loginValidationSchema,
+  changePasswordValidationSchema,
   updateValidationSchema,
 };

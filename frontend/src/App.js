@@ -34,6 +34,9 @@ import AddVideo from "./views/panel/Pages/add/AddVideo";
 import EditVideo from "./views/panel/Pages/edit/EditVideo";
 import Favourites from "./views/single-pages/Favourites";
 import About from "./views/About";
+import Email from "./views/changePassword/Email";
+import Otp from "./views/changePassword/Otp";
+import ChangePw from "./views/changePassword/Change_pw";
 function App() {
   const [user, setUser] = useState(null);
   const [searchText, setSearchText] = useState({ query: "" });
@@ -79,7 +82,7 @@ function App() {
               element={<Login setUser={setUser} setMessage={setMessage} />}
             />
             <Route path="signup" element={<Signup setMessage={setMessage} />} />
-            <Route path="verify" element={<Verify />} />
+            <Route path="verify" element={<Verify setMessage={setMessage}  />} />
             <Route
               path="search"
               element={
@@ -169,6 +172,9 @@ function App() {
               />
             </Route>
             <Route path="about" element={<About />} />
+            <Route path="forget" element={<Email setMessage={setMessage} />} />
+            <Route path="enter_otp" element={<Otp setMessage={setMessage}/>} />
+            <Route path="change_password" element={<ChangePw setMessage={setMessage}/>} />
 
             <Route path="*" element={<PageNotFound />} />
           </Routes>
