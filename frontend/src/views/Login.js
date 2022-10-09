@@ -23,7 +23,7 @@ const Login = ({ setUser, setMessage }) => {
                 const user = JSON.stringify(response);
                 window.localStorage.setItem("loggedInOlympicsUser", user);
                 setToken(response.token);
-                navigate("/live");
+                navigate("/");
                 setMessage({ message: 'Login successfully', className: 'success' })
               }
             } catch (error) {

@@ -13,7 +13,7 @@ const Notification = ({ notify }) => {
     });
   } 
   else if(message === "Bad request!"){
-    window.location.href='/login'
+    // window.location.href='/login'
     window.localStorage.clear();
 
     toast.error(message, {
@@ -23,7 +23,7 @@ const Notification = ({ notify }) => {
   
   else if (message === "token expired") {
     window.localStorage.clear();
-    window.location.href='/login'
+    // window.location.href='/login'
     toast.warning(message, {
       autoClose: 2000,
     });
