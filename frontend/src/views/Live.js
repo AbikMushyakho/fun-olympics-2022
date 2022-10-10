@@ -13,7 +13,10 @@ const Live = ({ user, setMessage }) => {
     let loggedUser = null;
     if (user !== null) {
       loggedUser = user;
-    } 
+    } else {
+      const localUser = window.localStorage.getItem("loggedInOlympicsUser");
+      loggedUser = JSON.parse(localUser);
+    }
 
     if (loggedUser === null) {
       navigate("/login");
@@ -55,10 +58,7 @@ const Live = ({ user, setMessage }) => {
         </div>
         {/* <ReactPlayer url="/assets/live-video/swimming.mp4" controls={true} autoPlay muted={true} /> */}
         <video autoPlay controls muted loop>
-          <source
-            src= "/assets/live-video/swimming.mp4"
-            type="video/mp4"
-          />
+          <source src="/assets/live-video/swimming.mp4" type="video/mp4" />
         </video>
       </div>
 

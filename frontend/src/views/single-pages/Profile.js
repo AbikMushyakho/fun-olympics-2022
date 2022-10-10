@@ -1,6 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-const Profile = ({user}) => {
+const Profile = ({ user }) => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    let loggedUser = null;
+    if (user !== null) {
+      loggedUser = user;
+    } else {
+      const localUser = window.localStorage.getItem("loggedInOlympicsUser");
+      loggedUser = JSON.parse(localUser);
+    }
+
+    if (loggedUser === null) {
+      navigate("/login");
+    }
+  }, []);
+
   return (
     <>
       <div className="h-full bg-gray-50 dark:bg-gray-900 py-10">
@@ -42,7 +59,7 @@ const Profile = ({user}) => {
                     id="username"
                     className="border-1  rounded-xl px-4 py-2 w-full  dark:bg-gray-800 dark:border-gray-700 "
                     type="text"
-                    value={user?user.username:""}
+                    value={user ? user.username : ""}
                   />
                 </div>
               </div>
@@ -58,7 +75,7 @@ const Profile = ({user}) => {
                   id="email"
                   className="border-1  rounded-xl px-4 py-2 w-full dark:bg-gray-800 dark:border-gray-700"
                   type="email"
-                  value={user?user.email:""}
+                  value={user ? user.email : ""}
                 />
                 <span className="text-gray-600 pt-4 block opacity-70 dark:text-gray-300">
                   Personal login information of your account

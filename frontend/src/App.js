@@ -74,7 +74,7 @@ function App() {
         />
 
         <div className="relative overflow-y-auto p-4  md:px-10 py-10 dark:bg-gray-900 min-h-screen text-wheatt ">
-          {message && <Notification notify={message} />}
+          {message && <Notification setUser={setUser} notify={message} />}
           <Routes>
             <Route index element={<Home setMessage={setMessage} />} />
             <Route

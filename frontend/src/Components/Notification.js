@@ -3,7 +3,7 @@ import React from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const Notification = ({ notify }) => {
+const Notification = ({ setUser,notify }) => {
   // const navigate = useNavigate()
   const { className, message } = notify;
 
@@ -15,7 +15,7 @@ const Notification = ({ notify }) => {
   else if(message === "Bad request!"){
     // window.location.href='/login'
     window.localStorage.clear();
-
+    setUser(null)
     toast.error(message, {
       autoClose: 2000,
     });
@@ -23,6 +23,7 @@ const Notification = ({ notify }) => {
   
   else if (message === "token expired") {
     window.localStorage.clear();
+    setUser(null)
     // window.location.href='/login'
     toast.warning(message, {
       autoClose: 2000,
