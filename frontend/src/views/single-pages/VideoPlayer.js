@@ -30,7 +30,7 @@ const VideoPlayer = ({ user, setMessage }) => {
 
     if (loggedUser === null) {
       setMessage({
-        message: "Must login to watch live videos!!",
+        message: "Must login to watch videos!!",
         className: "warning",
       });
       navigate("/login");
